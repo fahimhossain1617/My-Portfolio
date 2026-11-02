@@ -11,10 +11,11 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { CustomCursor } from "@/components/CustomCursor";
 import { BackToTop } from "@/components/BackToTop";
 import { ScrollRevealProvider } from "@/components/ScrollRevealProvider";
+import { WaveBackground } from "@/components/WaveBackground";
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen bg-[var(--bg)] text-[var(--text)]">
+    <div className="relative min-h-screen text-[var(--text)]">
       {/* Skip to Main Content Accessibility Link */}
       <a
         href="#main-content"
@@ -23,12 +24,13 @@ export default function HomePage() {
         Skip to main content
       </a>
 
+      <WaveBackground />
       <ScrollRevealProvider />
       <CustomCursor />
       <Navigation />
       <CommandPalette />
 
-      <main id="main-content">
+      <main id="main-content" className="relative z-[1]">
         <Hero />
         <About />
         <Skills />

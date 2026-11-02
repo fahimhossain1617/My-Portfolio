@@ -15,7 +15,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--bg)] pt-14 pb-24 md:pb-14">
+    <footer className="relative z-[1] border-t border-[var(--border)] bg-[var(--bg)] pt-14 pb-24 md:pb-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-12">
           {/* Column 1 — Identity, Education, Location & Availability (7 cols) */}

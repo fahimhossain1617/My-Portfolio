@@ -75,6 +75,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Layering for scroll-based wave background */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+section {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  background-color: var(--bg);
+}
+
 /* Ensure Bangla text has generous line height */
 html[lang="bn"] body {
   line-height: 1.75;
