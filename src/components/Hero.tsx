@@ -151,7 +151,7 @@ export function Hero() {
             <h1
               id="hero-heading"
               aria-label={fullGreeting}
-              className="text-4xl font-light tracking-tight text-[var(--heading)] sm:text-5xl lg:text-6xl min-h-[1.15em]"
+              className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-5xl lg:text-6xl min-h-[1.15em] break-words"
             >
               <span>{typedGreeting || "\u00A0"}</span>
               {isTyping && (

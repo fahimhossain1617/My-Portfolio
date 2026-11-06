@@ -136,12 +136,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const { name, email, phone, description } = validation.sanitized;
+    const submittedAtIso = new Date().toISOString();
+
+    // Development/Test simulated delivery mode for manual verification without incurring third-party API quotas
+    if (resendApiKey === "test_mock_success") {
+      return NextResponse.json(
+        {
+          ok: true,
+          code: "DELIVERED",
+          timestamp: submittedAtIso,
+        },
+        { status: 200 }
+      );
+    }
+
     const resend = new Resend(resendApiKey);
     const fromAddress =
       process.env.RESEND_FROM_EMAIL?.trim() || "onboarding@resend.dev";
 
-    const { name, email, phone, description } = validation.sanitized;
-    const submittedAtIso = new Date().toISOString();
     const submittedAtReadable = new Intl.DateTimeFormat("en-GB", {
       dateStyle: "full",
       timeStyle: "long",

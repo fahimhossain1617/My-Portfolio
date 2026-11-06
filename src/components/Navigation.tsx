@@ -10,9 +10,10 @@ import {
   User,
 } from "lucide-react";
 import { usePreferences } from "@/context/PreferencesContext";
-import { UI_TEXT } from "@/data/portfolio";
+import { PERSONAL_INFO, UI_TEXT } from "@/data/portfolio";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
+import { MobileBottomNav } from "./MobileBottomNav";
 
 const NAV_ITEMS = [
   { id: "home", href: "#home", label: UI_TEXT.nav.home, icon: Home },
@@ -76,8 +77,18 @@ export function Navigation() {
       {/* Top Bar with Glassmorphism Effect & Exact Grid Alignment */}
       <header className="fixed top-0 right-0 left-0 z-40 border-b border-[var(--border)]/60 bg-[var(--bg)]/80 backdrop-blur-xl backdrop-saturate-150 transition-colors duration-200">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-10">
-          {/* Left Spacer Container (Maintains exact navbar item positioning without the name) */}
-          <div className="flex flex-1 items-center justify-start" />
+          {/* Left: Brand Identity (Md. Fahim Hossain) */}
+          <div className="flex flex-1 items-center justify-start min-w-0">
+            <a
+              href="#home"
+              onClick={(e) => scrollToSection(e, "home")}
+              className="group inline-flex items-center gap-1.5 cursor-pointer max-w-full"
+            >
+              <span className="truncate font-mono text-xs sm:text-sm font-semibold tracking-tight text-[var(--heading)] group-hover:text-[var(--accent)] transition-colors">
+                {t(PERSONAL_INFO.fullName)}
+              </span>
+            </a>
+          </div>
 
           {/* Center: Desktop Navigation Links */}
           <nav
@@ -111,14 +122,14 @@ export function Navigation() {
           </nav>
 
           {/* Right: Controls (Language Toggle, Theme Toggle, Primary Hire Me / Contact CTA) */}
-          <div className="flex flex-1 items-center justify-end gap-2.5">
+          <div className="flex flex-1 items-center justify-end gap-1.5 sm:gap-2.5 shrink-0">
             <LanguageToggle />
             <ThemeToggle />
 
             <a
               href="#contact"
               onClick={(e) => scrollToSection(e, "contact")}
-              className="inline-flex h-9 items-center rounded-[12px] bg-[var(--accent)] px-4 text-xs font-medium text-[var(--on-accent)] transition-all hover:bg-[var(--accent-hover)] cursor-pointer"
+              className="inline-flex h-8 sm:h-9 shrink-0 items-center rounded-[10px] sm:rounded-[12px] bg-[var(--accent)] px-2.5 sm:px-4 text-[11px] sm:text-xs font-medium text-[var(--on-accent)] transition-all hover:bg-[var(--accent-hover)] cursor-pointer whitespace-nowrap"
             >
               {t(UI_TEXT.nav.contactCta)}
             </a>
@@ -126,42 +137,11 @@ export function Navigation() {
         </div>
       </header>
 
-      {/* Mobile Fixed Bottom Navigation with Glassmorphism */}
-      <nav
-        aria-label="Mobile bottom navigation"
-        className="fixed right-0 bottom-0 left-0 z-40 border-t border-[var(--border)]/60 bg-[var(--bg)]/85 backdrop-blur-xl backdrop-saturate-150 pb-[env(safe-area-inset-bottom)] md:hidden shadow-lg"
-      >
-        <ul className="grid grid-cols-6 items-center px-1 py-1.5">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeSection === item.id;
-            return (
-              <li key={item.id} className="flex justify-center">
-                <a
-                  href={item.href}
-                  onClick={(e) => scrollToSection(e, item.id)}
-                  aria-current={isActive ? "page" : undefined}
-                  className={`flex w-full flex-col items-center justify-center gap-0.5 rounded-[12px] py-1 text-[10px] font-medium transition-colors ${
-                    isActive
-                      ? "text-[var(--accent)]"
-                      : "text-[var(--muted)] hover:text-[var(--heading)]"
-                  }`}
-                >
-                  <Icon
-                    className={`h-4 w-4 ${
-                      isActive ? "text-[var(--accent)]" : ""
-                    }`}
-                    aria-hidden="true"
-                  />
-                  <span className="max-w-full truncate px-0.5 leading-tight">
-                    {t(item.label)}
-                  </span>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+      {/* Floating Glassmorphic Mobile Bottom Navigation with Specular Shimmer Ring */}
+      <MobileBottomNav
+        activeSection={activeSection}
+        onNavigate={scrollToSection}
+      />
     </>
   );
 }

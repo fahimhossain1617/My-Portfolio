@@ -3,6 +3,7 @@
 import React from "react";
 import { usePreferences } from "@/context/PreferencesContext";
 import { SKILL_GROUPS } from "@/data/portfolio";
+import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
 
 export function Skills() {
   const { lang, t } = usePreferences();
@@ -30,31 +31,49 @@ export function Skills() {
       className="py-7 sm:py-9 lg:py-10 relative overflow-hidden"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-        <div data-reveal="fade-up">
-          <h2
-            id="skills-heading"
-            className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
-          >
-            {lang === "bn" ? "দক্ষতা ও প্রযুক্তি" : "Skills & Technologies"}
-          </h2>
-          <div className="mt-2 h-1 w-12 rounded-full bg-[var(--accent)]" />
-          <p className="mt-3 text-sm text-[var(--muted)] max-w-xl">
-            {lang === "bn"
-              ? "আমি নিয়মিত যেসকল ফ্রন্টএন্ড, ব্যাকএন্ড ও আধুনিক টুলস ব্যবহার করে কাজ করি।"
-              : "Core technologies, frameworks, and modern tools I use to build scalable products."}
-          </p>
-        </div>
+        <AgentBuildWrapper
+          agentName="Layout_Bot"
+          color="#8B8CF7"
+          delay={0.05}
+          badgeText="Section • Header"
+          dimensionText="410 × 60"
+          agentCount={2}
+          className="w-fit"
+        >
+          <div>
+            <h2
+              id="skills-heading"
+              className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
+            >
+              {lang === "bn" ? "দক্ষতা ও প্রযুক্তি" : "Skills & Technologies"}
+            </h2>
+            <div className="mt-2 h-1 w-12 rounded-full bg-[var(--accent)]" />
+            <p className="mt-3 text-sm text-[var(--muted)] max-w-xl">
+              {lang === "bn"
+                ? "আমি নিয়মিত যেসকল ফ্রন্টএন্ড, ব্যাকএন্ড ও আধুনিক টুলস ব্যবহার করে কাজ করি।"
+                : "Core technologies, frameworks, and modern tools I use to build scalable products."}
+            </p>
+          </div>
+        </AgentBuildWrapper>
 
         {/* Seamless Free-Flowing Marquee Stream without Any Boxy Shapes */}
-        <div
-          data-reveal="zoom-in"
-          aria-label={
-            lang === "bn"
-              ? "দক্ষতা ও প্রযুক্তি তালিকা"
-              : "Skills and technologies marquee"
-          }
-          className="marquee-container relative mt-7 overflow-hidden py-3"
+        <AgentBuildWrapper
+          agentName="Motion_Craft"
+          color="#38BDF8"
+          delay={0.15}
+          badgeText="Stream • InfiniteMarquee"
+          dimensionText="100% × 120"
+          agentCount={3}
+          className="mt-7 w-full"
         >
+          <div
+            aria-label={
+              lang === "bn"
+                ? "দক্ষতা ও প্রযুক্তি তালিকা"
+                : "Skills and technologies marquee"
+            }
+            className="marquee-container relative overflow-hidden py-3"
+          >
           {/* Left & Right Subtle Smoky Fade Masks Matched to Side Margins */}
           <div
             aria-hidden="true"
@@ -135,6 +154,7 @@ export function Skills() {
             ))}
           </div>
         </div>
+        </AgentBuildWrapper>
       </div>
     </section>
   );

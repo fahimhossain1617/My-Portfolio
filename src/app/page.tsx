@@ -9,13 +9,12 @@ import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { CommandPalette } from "@/components/CommandPalette";
 import { CustomCursor } from "@/components/CustomCursor";
-import { BackToTop } from "@/components/BackToTop";
 import { ScrollRevealProvider } from "@/components/ScrollRevealProvider";
 import { WaveBackground } from "@/components/WaveBackground";
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen text-[var(--text)]">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-clip text-[var(--text)]">
       {/* Skip to Main Content Accessibility Link */}
       <a
         href="#main-content"
@@ -30,7 +29,7 @@ export default function HomePage() {
       <Navigation />
       <CommandPalette />
 
-      <main id="main-content" className="relative z-[1]">
+      <main id="main-content" className="relative z-[1] w-full max-w-full overflow-x-clip">
         <Hero />
         <About />
         <Skills />
@@ -40,7 +39,6 @@ export default function HomePage() {
       </main>
 
       <Footer />
-      <BackToTop />
     </div>
   );
 }

@@ -10,7 +10,8 @@ import {
   validateContactInput,
 } from "@/lib/validation";
 import { WhatsAppIcon } from "./BrandIcons";
-import { ContactSuccessAnimation } from "./ContactSuccessAnimation";
+import { DeliveryFlightStatus } from "./delivery/DeliveryMascotStage";
+import { SuccessCheckmark } from "./delivery/SuccessCheckmark";
 
 type FieldErrorKey =
   | "nameRequired"
@@ -18,7 +19,15 @@ type FieldErrorKey =
   | "phoneRequired"
   | "descriptionRequired";
 
-export function ContactForm() {
+export interface ContactFormProps {
+  flightStatus?: DeliveryFlightStatus;
+  onFlightStatusChange?: (status: DeliveryFlightStatus) => void;
+}
+
+export function ContactForm({
+  flightStatus = "idle",
+  onFlightStatusChange,
+}: ContactFormProps) {
   const { lang, t } = usePreferences();
 
   const [values, setValues] = useState<ContactFormInput>({
@@ -74,8 +83,14 @@ export function ContactForm() {
     setStatus("submitting");
     setServerErrorMessage("");
 
+    // Initiate 3D Origami Paper-Plane Bird diagonal flight synchronized with email request
+    onFlightStatusChange?.("flying");
+
+    // Flight duration (4.5s) matches the graceful flight of the 3D paper bird
+    const minFlightPromise = new Promise((resolve) => setTimeout(resolve, 4500));
+
     try {
-      const response = await fetch("/api/contact", {
+      const fetchPromise = fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,6 +104,9 @@ export function ContactForm() {
         }),
       });
 
+      // Synchronize backend response with flight exit off-screen
+      const [response] = await Promise.all([fetchPromise, minFlightPromise]);
+
       const data = (await response.json()) as {
         ok?: boolean;
         code?: string;
@@ -98,6 +116,7 @@ export function ContactForm() {
       };
 
       if (!response.ok || !data.ok) {
+        onFlightStatusChange?.("error");
         if (data.errors) {
           setFieldErrors(data.errors);
         }
@@ -110,6 +129,7 @@ export function ContactForm() {
         return;
       }
 
+      onFlightStatusChange?.("success");
       setConfirmedPayload(validation.sanitized);
       setStatus("success");
       setValues({
@@ -120,6 +140,7 @@ export function ContactForm() {
         honeypot: "",
       });
     } catch {
+      onFlightStatusChange?.("error");
       setServerErrorMessage(
         lang === "bn"
           ? "নেটওয়ার্ক সংক্রান্ত জটিলতা দেখা দিয়েছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।"
@@ -130,6 +151,7 @@ export function ContactForm() {
   };
 
   const handleResetForm = () => {
+    onFlightStatusChange?.("idle");
     setStatus("idle");
     setConfirmedPayload(null);
     setServerErrorMessage("");
@@ -138,7 +160,7 @@ export function ContactForm() {
 
   if (status === "success" && confirmedPayload) {
     return (
-      <ContactSuccessAnimation
+      <SuccessCheckmark
         submittedData={confirmedPayload}
         onReset={handleResetForm}
       />

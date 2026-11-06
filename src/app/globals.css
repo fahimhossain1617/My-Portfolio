@@ -14,6 +14,22 @@
   --heading: #EEF0FF;
   --gradient: linear-gradient(180deg, #000000 0%, #8B8CF7 100%);
   --gradient-flip: linear-gradient(180deg, #8B8CF7 0%, #000000 100%);
+  /* Multi-Agent Cursor & Build Tokens (Dark Mode) */
+  --agent-1: #8B8CF7;
+  --agent-1-fg: #07070E;
+  --agent-2: #A5B4FC;
+  --agent-2-fg: #07070E;
+  --agent-3: #6366F1;
+  --agent-3-fg: #FFFFFF;
+  --agent-cursor-stroke: #EEF0FF;
+  --agent-frame-border: rgba(139, 140, 247, 0.55);
+  --agent-frame-bg: rgba(139, 140, 247, 0.045);
+  --agent-Sweep: rgba(139, 140, 247, 0.14);
+  --agent-pill-bg: rgba(11, 11, 18, 0.94);
+  --agent-pill-border: rgba(139, 140, 247, 0.38);
+  --agent-pill-text: #EEF0FF;
+  --agent-handle-bg: #0B0B12;
+  --agent-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
   color-scheme: dark;
 }
 
@@ -30,6 +46,22 @@
   --heading: #0B0B1A;
   --gradient: linear-gradient(180deg, #FAFAFF 0%, #8B8CF7 100%);
   --gradient-flip: linear-gradient(180deg, #8B8CF7 0%, #FAFAFF 100%);
+  /* Multi-Agent Cursor & Build Tokens (Light Mode) */
+  --agent-1: #5B5DE0;
+  --agent-1-fg: #FFFFFF;
+  --agent-2: #4338CA;
+  --agent-2-fg: #FFFFFF;
+  --agent-3: #7C3AED;
+  --agent-3-fg: #FFFFFF;
+  --agent-cursor-stroke: #FFFFFF;
+  --agent-frame-border: rgba(91, 93, 224, 0.48);
+  --agent-frame-bg: rgba(91, 93, 224, 0.035);
+  --agent-Sweep: rgba(91, 93, 224, 0.10);
+  --agent-pill-bg: rgba(255, 255, 255, 0.96);
+  --agent-pill-border: rgba(91, 93, 224, 0.32);
+  --agent-pill-text: #0B0B1A;
+  --agent-handle-bg: #FFFFFF;
+  --agent-shadow: 0 4px 14px rgba(91, 93, 224, 0.18);
   color-scheme: light;
 }
 
@@ -63,6 +95,9 @@ html {
   scroll-behavior: smooth;
   background-color: var(--bg);
   color: var(--text);
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 body {
@@ -72,6 +107,9 @@ body {
   font-size: 16px;
   line-height: 1.6;
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+  position: relative;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -190,9 +228,47 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale3d(0.94, 0.94, 1) translate3d(0, 24px, 0);
 }
 
+@media (max-width: 640px) {
+  [data-reveal="fade-right"],
+  [data-reveal="fade-left"] {
+    transform: translate3d(0, 24px, 0);
+  }
+}
+
 [data-reveal].is-revealed {
   opacity: 1;
   transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+}
+
+/* ==========================================================================
+   Iridescent Glass Specular Shimmer Ring & Shimmer Glow
+   ========================================================================== */
+@keyframes specularRingRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-specular-ring {
+  animation: specularRingRotate 7s linear infinite;
+}
+
+@keyframes pulseShimmerGleam {
+  0%, 100% {
+    opacity: 0.7;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.3);
+  }
+}
+
+.animate-pulse-gleam {
+  animation: pulseShimmerGleam 3s ease-in-out infinite;
 }
 
 /* Respect Reduced Motion Preferences */

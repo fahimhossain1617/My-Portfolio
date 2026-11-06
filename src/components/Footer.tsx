@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowUp, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { usePreferences } from "@/context/PreferencesContext";
 import { PERSONAL_INFO } from "@/data/portfolio";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "./BrandIcons";
@@ -10,12 +10,8 @@ export function Footer() {
   const { lang, t } = usePreferences();
   const currentYear = new Date().getFullYear();
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
-    <footer className="relative z-[1] border-t border-[var(--border)] bg-[var(--bg)] pt-14 pb-24 md:pb-14">
+    <footer className="relative z-[1] border-t border-[var(--border)] bg-[var(--bg)] pt-14 pb-32 sm:pb-24 md:pb-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-12">
           {/* Column 1 — Identity, Education, Location & Availability (7 cols) */}
@@ -120,16 +116,6 @@ export function Footer() {
           <p>
             © {currentYear} {t(PERSONAL_INFO.fullName)}. {lang === "bn" ? "সর্বস্বত্ব সংরক্ষিত।" : "All rights reserved."}
           </p>
-
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="inline-flex items-center gap-1 font-mono text-xs text-[var(--muted)] transition-colors hover:text-[var(--accent)] hover:underline cursor-pointer"
-            aria-label={lang === "bn" ? "উপরে যান" : "Back to top"}
-          >
-            <span>{lang === "bn" ? "উপরে যান" : "Back to top"}</span>
-            <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
-          </button>
         </div>
       </div>
     </footer>

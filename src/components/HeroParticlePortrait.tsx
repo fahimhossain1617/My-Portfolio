@@ -510,7 +510,7 @@ export function HeroParticlePortrait({
       ref={containerRef}
       onClick={handleReplay}
       title="Click to replay particle animation"
-      className="group relative mx-auto flex aspect-square w-full max-w-[320px] sm:max-w-[370px] lg:max-w-[410px] items-center justify-center overflow-visible bg-transparent cursor-pointer select-none"
+      className="group relative mx-auto flex aspect-square w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[370px] lg:max-w-[410px] items-center justify-center overflow-visible bg-transparent cursor-pointer select-none"
     >
       {/* Subtle Ambient UI-Accent Aura Behind Portrait */}
       <div

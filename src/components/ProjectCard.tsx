@@ -77,7 +77,7 @@ export function ProjectCard({
         >
           <div className="relative mx-auto w-full pt-0.5 pb-1.5">
             {/* Compact Laptop Display Lid */}
-            <div className="relative mx-auto w-full max-w-[300px] sm:max-w-[360px] rounded-t-[12px] sm:rounded-t-[14px] border-t-2 border-x-2 border-[#333344] bg-[#0c0c14] p-1.5 sm:p-2 pb-0 shadow-xl ring-1 ring-white/10">
+            <div className="relative mx-auto w-full max-w-[250px] xs:max-w-[300px] sm:max-w-[360px] rounded-t-[12px] sm:rounded-t-[14px] border-t-2 border-x-2 border-[#333344] bg-[#0c0c14] p-1.5 sm:p-2 pb-0 shadow-xl ring-1 ring-white/10">
               {/* Laptop Camera & Sensor Bar */}
               <div className="absolute top-0.5 left-1/2 -translate-x-1/2 flex items-center gap-1">
                 <div className="h-1 w-1 rounded-full bg-[#1e1e2d] ring-1 ring-white/20" />
@@ -112,7 +112,7 @@ export function ProjectCard({
             </div>
 
             {/* Laptop Base / Keyboard Deck */}
-            <div className="relative mx-auto -mt-[1px] h-2.5 sm:h-3 w-full max-w-[320px] sm:max-w-[385px] rounded-b-[8px] sm:rounded-b-[11px] border-b border-x border-[#2c2d3d] bg-gradient-to-b from-[#222230] via-[#171722] to-[#0f0f18] shadow-[0_8px_18px_rgba(0,0,0,0.45)]">
+            <div className="relative mx-auto -mt-[1px] h-2.5 sm:h-3 w-full max-w-[268px] xs:max-w-[320px] sm:max-w-[385px] rounded-b-[8px] sm:rounded-b-[11px] border-b border-x border-[#2c2d3d] bg-gradient-to-b from-[#222230] via-[#171722] to-[#0f0f18] shadow-[0_8px_18px_rgba(0,0,0,0.45)]">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-10 sm:w-12 rounded-b-[3px] bg-[#111119] border-x border-b border-white/10" />
             </div>
           </div>

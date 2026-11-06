@@ -10,6 +10,7 @@ import {
 } from "@/data/portfolio";
 import { ProjectCard } from "./ProjectCard";
 import { CaseStudy } from "./CaseStudy";
+import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
 
 export function Projects() {
   const { lang, t } = usePreferences();
@@ -36,49 +37,68 @@ export function Projects() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         {/* Header (Left-aligned as requested) */}
-        <div data-reveal="fade-up">
-          <h2
-            id="projects-heading"
-            className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
-          >
-            {lang === "bn"
-              ? "প্রজেক্ট ও কাজ (Featured Projects)"
-              : "Featured Projects & Works"}
-          </h2>
-          <div className="mt-2 h-1 w-12 rounded-full bg-[var(--accent)]" />
-          <p className="mt-3 text-sm text-[var(--muted)] max-w-xl">
-            {lang === "bn"
-              ? "বাস্তব সমস্যার সমাধানে তৈরি করা নির্বাচিত ওয়েব অ্যাপ্লিকেশন ও প্রজেক্ট।"
-              : "A showcase of full-stack web applications, business platforms, and interactive digital solutions."}
-          </p>
-        </div>
+        <AgentBuildWrapper
+          agentName="UI_Agent"
+          color="#8B8CF7"
+          delay={0.05}
+          badgeText="Section • Header"
+          dimensionText="420 × 60"
+          agentCount={2}
+          className="w-fit"
+        >
+          <div>
+            <h2
+              id="projects-heading"
+              className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
+            >
+              {lang === "bn"
+                ? "প্রজেক্ট ও কাজ (Featured Projects)"
+                : "Featured Projects & Works"}
+            </h2>
+            <div className="mt-2 h-1 w-12 rounded-full bg-[var(--accent)]" />
+            <p className="mt-3 text-sm text-[var(--muted)] max-w-xl">
+              {lang === "bn"
+                ? "বাস্তব সমস্যার সমাধানে তৈরি করা নির্বাচিত ওয়েব অ্যাপ্লিকেশন ও প্রজেক্ট।"
+                : "A showcase of full-stack web applications, business platforms, and interactive digital solutions."}
+            </p>
+          </div>
+        </AgentBuildWrapper>
 
         {/* Category Filters Centered in the Middle (Fits cleanly on mobile without scrolling) */}
-        <div
-          data-reveal="fade-up"
-          role="group"
-          aria-label={t(UI_TEXT.projects.filterLabel)}
-          className="mt-6 flex flex-wrap items-center justify-center gap-2"
+        <AgentBuildWrapper
+          agentName="Layout_Bot"
+          color="#38BDF8"
+          delay={0.12}
+          badgeText="Navigation • FilterGroup"
+          dimensionText="480 × 44"
+          agentCount={2}
+          className="mt-6 flex justify-center"
         >
-          {PROJECT_CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setSelectedCategory(cat.id)}
-                aria-pressed={isSelected}
-                className={`rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-medium transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? "bg-[var(--accent)] text-[var(--on-accent)] shadow-sm"
-                    : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--heading)]"
-                }`}
-              >
-                {t(cat.label)}
-              </button>
-            );
-          })}
-        </div>
+          <div
+            role="group"
+            aria-label={t(UI_TEXT.projects.filterLabel)}
+            className="flex flex-wrap items-center justify-center gap-2"
+          >
+            {PROJECT_CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  aria-pressed={isSelected}
+                  className={`rounded-full px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-medium transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? "bg-[var(--accent)] text-[var(--on-accent)] shadow-sm"
+                      : "border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--heading)]"
+                  }`}
+                >
+                  {t(cat.label)}
+                </button>
+              );
+            })}
+          </div>
+        </AgentBuildWrapper>
 
         {/* Compact Projects Grid */}
         {filteredProjects.length === 0 ? (
@@ -89,24 +109,40 @@ export function Projects() {
           </div>
         ) : (
           <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
-            {filteredProjects.map((project, idx) => (
-              <div
-                key={project.id}
-                data-reveal={idx % 2 === 0 ? "fade-right" : "fade-left"}
-                style={{ transitionDelay: `${(idx % 2) * 120}ms` }}
-              >
-                <ProjectCard
-                  project={project}
-                  gradientMode={idx % 2 === 0 ? "gradient" : "gradient-flip"}
-                  isExpanded={expandedProjectId === project.id}
-                  onToggleExpand={() =>
-                    setExpandedProjectId((prev) =>
-                      prev === project.id ? null : project.id
-                    )
-                  }
-                />
-              </div>
-            ))}
+            {filteredProjects.map((project, idx) => {
+              const projectAgents = [
+                { name: "Card_Assembler", color: "#8B8CF7", badge: "Project • FullStack" },
+                { name: "Builder_01", color: "#38BDF8", badge: "Project • WebApp" },
+                { name: "Style_Architect", color: "#10B981", badge: "Project • UI" },
+                { name: "UI_Agent", color: "#A3A4FA", badge: "Project • Solution" },
+                { name: "Layout_Bot", color: "#F59E0B", badge: "Project • Platform" },
+              ];
+              const agent = projectAgents[idx % projectAgents.length];
+
+              return (
+                <AgentBuildWrapper
+                  key={project.id}
+                  agentName={agent.name}
+                  color={agent.color}
+                  delay={0.1 + (idx % 2) * 0.12}
+                  badgeText={`${agent.badge} #${idx + 1}`}
+                  dimensionText="580 × 340"
+                  agentCount={3}
+                  className="h-full w-full"
+                >
+                  <ProjectCard
+                    project={project}
+                    gradientMode={idx % 2 === 0 ? "gradient" : "gradient-flip"}
+                    isExpanded={expandedProjectId === project.id}
+                    onToggleExpand={() =>
+                      setExpandedProjectId((prev) =>
+                        prev === project.id ? null : project.id
+                      )
+                    }
+                  />
+                </AgentBuildWrapper>
+              );
+            })}
           </div>
         )}
       </div>
