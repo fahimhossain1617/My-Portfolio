@@ -131,11 +131,14 @@ export const PERSONAL_INFO = {
     whatsappInternational: "+8801947281437",
     whatsappDigits: "8801947281437",
     whatsappUrl: "https://wa.me/8801947281437",
+    whatsappName: "Fahim Hossain",
     linkedinUrl: "https://www.linkedin.com/in/md-fahim-hossain-cse",
-    githubUrl: "https://github.com/fahimhosen1617",
+    linkedinUsername: "Fahim Hossain",
+    githubUrl: "https://github.com/fahimhossain1617",
+    githubUsername: "fahimhossain1617",
     githubPlaceholderNote: {
-      en: "GitHub profile: @fahimhosen1617",
-      bn: "গিটহাব প্রোফাইল: @fahimhosen1617",
+      en: "GitHub profile: @fahimhossain1617",
+      bn: "গিটহাব প্রোফাইল: @fahimhossain1617",
     },
   },
   portraitSrc: "/images/fahim-portrait.png",
@@ -339,7 +342,7 @@ export const PROJECTS: ProjectRecord[] = [
       bn: "লাইভ অ্যাপ্লিকেশন • সম্পূর্ণ প্রস্তুত",
     },
     liveUrl: "https://focentia.vercel.app",
-    githubUrl: "https://github.com/fahimhosen1617/focentia",
+    githubUrl: "https://github.com/fahimhossain1617/focentia",
     caseStudy: {
       overview: {
         en: "Focentia is a personal productivity web application built to help students and self-directed learners organize daily priorities, track focus sessions, maintain structured notes, and review personal progress from a single cohesive interface.",
@@ -435,7 +438,7 @@ export const PROJECTS: ProjectRecord[] = [
       bn: "ফুল-স্ট্যাক প্রজেক্ট • সম্পন্ন",
     },
     liveUrl: "https://aurum-store-demo.vercel.app",
-    githubUrl: "https://github.com/fahimhosen1617/ecommerce-web-platform",
+    githubUrl: "https://github.com/fahimhossain1617/ecommerce-web-platform",
     caseStudy: {
       overview: {
         en: "Aurum is a modern responsive e-commerce web application engineered with React, Next.js, and TypeScript, featuring a performant product catalog, dynamic price and category filters, cart persistence, and a frictionless checkout inquiry workflow.",
@@ -531,7 +534,7 @@ export const PROJECTS: ProjectRecord[] = [
       bn: "ক্লায়েন্ট প্ল্যাটফর্ম • সফলভাবে সম্পন্ন",
     },
     liveUrl: "https://apex-fiber-isp.vercel.app",
-    githubUrl: "https://github.com/fahimhosen1617/isp-management-platform",
+    githubUrl: "https://github.com/fahimhossain1617/isp-management-platform",
     caseStudy: {
       overview: {
         en: "Apex Fiber is an institutional web presence and subscriber portal for an Internet Service Provider (ISP), built to showcase fiber broadband packages, verify geographic network coverage, and automate new connection inquiries.",
@@ -626,7 +629,7 @@ export const PROJECTS: ProjectRecord[] = [
       bn: "একাডেমিক প্ল্যাটফর্ম • লাইভ ক্লায়েন্ট প্রজেক্ট",
     },
     liveUrl: "https://radiation-coaching.vercel.app",
-    githubUrl: "https://github.com/fahimhosen1617/Radiation-Coaching",
+    githubUrl: "https://github.com/fahimhossain1617/Radiation-Coaching",
     caseStudy: {
       overview: {
         en: "Radiation Coaching Website is a dedicated educational web portal built for Radiation Coaching Center to publish academic science programs, class schedules, exam notices, and streamline online student admissions.",
@@ -1154,6 +1157,14 @@ export const UI_TEXT = {
     descriptor: {
       en: "Full-Stack Developer & AI Automation Enthusiast • B.Sc. in CSE Student at UITS.",
       bn: "ফুল-স্ট্যাক ডেভেলপার ও এআই অটোমেশন এনথুসিয়াস্ট • ইউআইটিএস-এ বি.এসসি. ইন সিএসই অধ্যয়নরত।",
+    },
+    collaborationInvite: {
+      en: "Let’s build something impactful together. Whether you are looking to hire a dedicated full-stack engineer, have a project in mind, or want to explore future-ready AI automation — I am always open to meaningful collaborations. Let’s connect and create impactful digital products.",
+      bn: "আসুন একসাথে তৈরি করি ভবিষ্যতের সেরা প্রোডাক্ট। আপনি কি দলের জন্য একজন নিবেদিত ফুল-স্ট্যাক ডেভেলপার খুঁজছেন, নতুন কোনো প্রজেক্ট বিল্ড করতে চান, নাকি এআই অটোমেশনের মাধ্যমে কাজের গতি বাড়াতে চান? আমি সবসময় বাস্তবমুখী ও মানসম্মত প্রজেক্টে যুক্ত হতে আগ্রহী। চলুন একসাথে কাজ করি এবং নতুন কিছু গড়ি।",
+    },
+    hireAction: {
+      en: "Let's Collaborate & Build",
+      bn: "একসাথে কাজ শুরু করুন",
     },
     rights: {
       en: "All rights reserved.",

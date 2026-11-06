@@ -65,30 +65,11 @@
   color-scheme: light;
 }
 
-/* Smooth 0.2s transition on background-color, color, border-color */
-html,
-body,
-div,
-section,
-header,
-nav,
-footer,
-article,
-button,
-a,
-input,
-textarea,
-span,
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  transition-property: background-color, color, border-color;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
+/* Smooth transitions on theme and color tokens */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html {
@@ -98,6 +79,24 @@ html {
   overflow-x: hidden;
   max-width: 100vw;
   width: 100%;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body,
+header,
+nav,
+section,
+footer,
+article,
+aside,
+main,
+button,
+a,
+input,
+textarea {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 0.28s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {

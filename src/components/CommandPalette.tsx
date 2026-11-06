@@ -110,6 +110,19 @@ export function CommandPalette() {
       },
     },
     {
+      id: "contact-open-gmail",
+      label: lang === "bn" ? "সরাসরি জিমেইলে লিখুন" : "Compose in Gmail",
+      category: lang === "bn" ? "যোগাযোগ" : "Contact",
+      action: () => {
+        window.open(
+          `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PERSONAL_INFO.contact.email)}&su=Portfolio%20Inquiry`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+        closePalette();
+      },
+    },
+    {
       id: "contact-copy-email",
       label: `${t(UI_TEXT.contact.copyEmail)} (${PERSONAL_INFO.contact.email})`,
       category: lang === "bn" ? "যোগাযোগ" : "Contact",
@@ -148,7 +161,7 @@ export function CommandPalette() {
       ? [
           {
             id: "contact-github",
-            label: lang === "bn" ? "গিটহাব প্রোফাইল (@fahimhosen1617)" : "GitHub Profile (@fahimhosen1617)",
+            label: lang === "bn" ? "গিটহাব প্রোফাইল (@fahimhossain1617)" : "GitHub Profile (@fahimhossain1617)",
             category: lang === "bn" ? "যোগাযোগ" : "Contact",
             action: () => {
               window.open(

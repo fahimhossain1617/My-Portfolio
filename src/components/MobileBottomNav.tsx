@@ -25,7 +25,8 @@ export function MobileBottomNav({
   activeSection,
   onNavigate,
 }: MobileBottomNavProps) {
-  const { lang, t } = usePreferences();
+  const { lang, t, theme } = usePreferences();
+  const isLight = theme === "light";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [bouncingItemId, setBouncingItemId] = useState<string | null>(null);
 
@@ -64,7 +65,7 @@ export function MobileBottomNav({
       {/* 1. Main Left Navigation Capsule (High-contrast glassmorphism with smooth active pill glide) */}
       <nav
         aria-label="Mobile Navigation"
-        className="pointer-events-auto relative flex items-center gap-1 sm:gap-1.5 rounded-full border border-white/20 dark:border-white/18 bg-[#16162a]/92 dark:bg-[#151528]/95 px-2 py-1.5 backdrop-blur-2xl shadow-[0_14px_45px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.08)_inset] light:bg-white/95 light:border-black/12 light:shadow-[0_12px_36px_rgba(0,0,0,0.15)] transition-colors duration-200"
+        className="pointer-events-auto relative flex items-center gap-1 sm:gap-1.5 rounded-full border border-slate-200/90 dark:border-white/18 bg-white/92 dark:bg-[#151528]/95 px-2 py-1.5 backdrop-blur-2xl shadow-[0_10px_30px_rgba(15,23,42,0.1),_0_1px_3px_rgba(15,23,42,0.06)] dark:shadow-[0_14px_45px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.08)_inset] transition-all duration-300"
       >
         {PRIMARY_TABS.map((tab) => {
           const Icon = tab.icon;
@@ -85,7 +86,7 @@ export function MobileBottomNav({
                 <motion.div
                   layoutId="mobileActivePillIndicator"
                   transition={{ type: "spring", stiffness: 480, damping: 32 }}
-                  className="absolute inset-0 rounded-full bg-[var(--accent)]/20 border border-[var(--accent)]/50 dark:bg-[var(--accent)]/28 dark:border-[var(--accent)]/60 shadow-sm"
+                  className="absolute inset-0 rounded-full bg-[var(--accent)]/15 border border-[var(--accent)]/35 dark:bg-[var(--accent)]/28 dark:border-[var(--accent)]/60 shadow-sm"
                 />
               )}
 
@@ -107,7 +108,7 @@ export function MobileBottomNav({
                   className={`h-5 w-5 transition-colors duration-200 ${
                     isActive
                       ? "text-[var(--accent)] stroke-[2.3]"
-                      : "text-white/70 dark:text-white/75 hover:text-white stroke-[1.8]"
+                      : "text-slate-500 hover:text-slate-900 dark:text-white/75 dark:hover:text-white stroke-[1.8]"
                   }`}
                   aria-hidden="true"
                 />
@@ -120,14 +121,17 @@ export function MobileBottomNav({
       {/* 2. Right Circular Action Button with Continuous Specular Shimmer Ring */}
       <div className="pointer-events-auto relative">
         {/* Specular Shimmer Rotating Glass Ring Container */}
-        <div className="relative h-12 w-12 rounded-full p-[1.5px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.65)]">
+        <div className="relative h-12 w-12 rounded-full p-[1.5px] overflow-hidden shadow-[0_8px_25px_rgba(15,23,42,0.12)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.65)]">
           {/* Continuously Rotating Specular Reflection Sheen */}
           <div
             aria-hidden="true"
-            className="animate-specular-ring absolute -inset-[100%] opacity-90 transition-opacity"
+            className={`animate-specular-ring absolute -inset-[100%] transition-opacity ${
+              isLight ? "opacity-95" : "opacity-90"
+            }`}
             style={{
-              background:
-                "conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.85) 18%, transparent 35%, var(--accent) 68%, rgba(255,255,255,0.95) 82%, transparent 100%)",
+              background: isLight
+                ? "conic-gradient(from 0deg, transparent 0%, rgba(91,93,224,0.4) 18%, transparent 35%, var(--accent) 68%, rgba(99,102,241,0.9) 82%, transparent 100%)"
+                : "conic-gradient(from 0deg, transparent 0%, rgba(255,255,255,0.85) 18%, transparent 35%, var(--accent) 68%, rgba(255,255,255,0.95) 82%, transparent 100%)",
             }}
           />
 
@@ -137,7 +141,7 @@ export function MobileBottomNav({
             onClick={() => setIsMenuOpen((prev) => !prev)}
             aria-expanded={isMenuOpen}
             aria-label={isMenuOpen ? "Close menu" : "Open quick actions menu"}
-            className="relative h-full w-full rounded-full bg-[#16162a]/95 dark:bg-[#151528]/98 backdrop-blur-2xl flex items-center justify-center text-white hover:text-[var(--accent)] transition-colors cursor-pointer select-none"
+            className="relative h-full w-full rounded-full bg-white/95 dark:bg-[#151528]/98 border border-slate-200/90 dark:border-transparent backdrop-blur-2xl flex items-center justify-center text-slate-700 dark:text-white hover:text-[var(--accent)] dark:hover:text-[var(--accent)] transition-colors cursor-pointer select-none"
           >
             {/* Plus Icon that rotates 180 degrees */}
             <motion.div
@@ -148,7 +152,7 @@ export function MobileBottomNav({
               {isMenuOpen ? (
                 <X className="h-5 w-5 text-[var(--accent)] stroke-[2.2]" />
               ) : (
-                <Plus className="h-5 w-5 text-white stroke-[2.2]" />
+                <Plus className="h-5 w-5 text-slate-700 dark:text-white stroke-[2.2]" />
               )}
             </motion.div>
           </button>
@@ -171,7 +175,7 @@ export function MobileBottomNav({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 16, scale: 0.9 }}
                 transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                className="pointer-events-auto absolute bottom-[calc(100%+12px)] right-0 z-40 w-12 sm:w-13 rounded-full border border-white/20 dark:border-white/18 bg-[#16162a]/95 dark:bg-[#151528]/98 py-3 px-1 backdrop-blur-2xl shadow-[0_16px_50px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.08)_inset] flex flex-col items-center gap-2.5 transition-colors select-none"
+                className="pointer-events-auto absolute bottom-[calc(100%+12px)] right-0 z-40 w-12 sm:w-13 rounded-full border border-slate-200/90 dark:border-white/18 bg-white/95 dark:bg-[#151528]/98 py-3 px-1 backdrop-blur-2xl shadow-[0_14px_40px_rgba(15,23,42,0.14)] dark:shadow-[0_16px_50px_rgba(0,0,0,0.7),_0_0_0_1px_rgba(255,255,255,0.08)_inset] flex flex-col items-center gap-2.5 transition-colors select-none"
               >
                 {/* 1. Skills Icon Button */}
                 <a
@@ -181,8 +185,8 @@ export function MobileBottomNav({
                   title={lang === "bn" ? "দক্ষতা" : "Skills"}
                   className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110 active:scale-95 ${
                     activeSection === "skills"
-                      ? "bg-[var(--accent)]/25 text-[var(--accent)] shadow-sm"
-                      : "text-white/75 hover:bg-white/10 hover:text-white"
+                      ? "bg-[var(--accent)]/20 text-[var(--accent)] shadow-sm"
+                      : "text-slate-500 hover:bg-slate-100/90 hover:text-slate-900 dark:text-white/75 dark:hover:bg-white/10 dark:hover:text-white"
                   }`}
                 >
                   <Code2 className="h-5 w-5 stroke-[2]" />
@@ -196,8 +200,8 @@ export function MobileBottomNav({
                   title={lang === "bn" ? "জার্নি" : "Journey"}
                   className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110 active:scale-95 ${
                     activeSection === "journey"
-                      ? "bg-[var(--accent)]/25 text-[var(--accent)] shadow-sm"
-                      : "text-white/75 hover:bg-white/10 hover:text-white"
+                      ? "bg-[var(--accent)]/20 text-[var(--accent)] shadow-sm"
+                      : "text-slate-500 hover:bg-slate-100/90 hover:text-slate-900 dark:text-white/75 dark:hover:bg-white/10 dark:hover:text-white"
                   }`}
                 >
                   <Milestone className="h-5 w-5 stroke-[2]" />

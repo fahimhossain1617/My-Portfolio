@@ -5,6 +5,7 @@ import { ArrowUpRight, Mail } from "lucide-react";
 import { usePreferences } from "@/context/PreferencesContext";
 import { PERSONAL_INFO, UI_TEXT } from "@/data/portfolio";
 import { HeroParticlePortrait } from "./HeroParticlePortrait";
+import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
 
 export function Hero() {
   const { lang, t } = usePreferences();
@@ -129,14 +130,6 @@ export function Hero() {
     }
   };
 
-  // Reusable curve matching site's [data-reveal] signature easing
-  const easeStyle = (delayMs: number) => ({
-    transitionProperty: "transform, opacity",
-    transitionDuration: "0.65s",
-    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-    transitionDelay: `${delayMs}ms`,
-  });
-
   return (
     <section
       id="home"
@@ -164,80 +157,86 @@ export function Hero() {
               )}
             </h1>
 
-            {/* 2. Role line: Cascades in right after typing with UI's smooth fade-up */}
-            <p
-              style={easeStyle(0)}
-              className={`mt-3 text-base font-normal text-[var(--accent)] sm:text-lg transform ${
-                revealed
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-5 pointer-events-none"
-              }`}
-            >
-              {headlineText}
-            </p>
+            {/* 2. Subtitle, Intro & Action Buttons: Built by Multi-Cursor Agent Swarm right after typing finishes */}
+            {revealed ? (
+              <AgentBuildWrapper
+                agentName="UI_Builder"
+                color="#8B8CF7"
+                badgeText="Hero • Profile"
+                dimensionText="620 × 250"
+                agentCount={3}
+                className="mt-3 w-full"
+              >
+                <div>
+                  {/* Role line */}
+                  <p className="text-base font-normal text-[var(--accent)] sm:text-lg">
+                    {headlineText}
+                  </p>
 
-            {/* 3. Cycling Focus Indicator: Staggered smooth fade-up */}
-            <div
-              aria-live="polite"
-              style={easeStyle(80)}
-              className={`mt-3 flex h-7 items-center gap-2 font-mono text-xs text-[var(--muted)] sm:text-sm transform ${
-                revealed
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-5 pointer-events-none"
-              }`}
-            >
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-              <span>{displayedText}</span>
-              <span
+                  {/* Cycling Focus Indicator */}
+                  <div
+                    aria-live="polite"
+                    className="mt-3 flex h-7 items-center gap-2 font-mono text-xs text-[var(--muted)] sm:text-sm"
+                  >
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
+                    <span>{displayedText}</span>
+                    <span
+                      aria-hidden="true"
+                      className="inline-block h-4 w-0.5 animate-pulse bg-[var(--accent)]"
+                    />
+                  </div>
+
+                  {/* Introduction Paragraph */}
+                  <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--text)]">
+                    {introText}
+                  </p>
+
+                  {/* Two Action Buttons */}
+                  <div className="mt-7 flex flex-wrap items-center gap-4">
+                    {/* Button 1: Solid Accent with ArrowUpRight icon */}
+                    <a
+                      href="#projects"
+                      onClick={(e) => scrollToSection(e, "projects")}
+                      className="inline-flex items-center gap-2 rounded-[12px] bg-[var(--accent)] px-6 py-3.5 text-sm font-medium text-[var(--on-accent)] transition-colors hover:bg-[var(--accent-hover)] cursor-pointer"
+                    >
+                      <span>{t(UI_TEXT.hero.exploreWorkCta)}</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+
+                    {/* Button 2: Border Accent with Mail icon */}
+                    <a
+                      href="#contact"
+                      onClick={(e) => scrollToSection(e, "contact")}
+                      className="inline-flex items-center gap-2 rounded-[12px] border border-[var(--accent)] bg-transparent px-6 py-3.5 text-sm font-medium text-[var(--accent)] transition-colors hover:bg-[var(--surface)] cursor-pointer"
+                    >
+                      <Mail className="h-4 w-4" aria-hidden="true" />
+                      <span>{t(UI_TEXT.hero.contactMeCta)}</span>
+                    </a>
+                  </div>
+                </div>
+              </AgentBuildWrapper>
+            ) : (
+              /* Invisible layout placeholder so structure remains rock-solid while typing */
+              <div
+                className="mt-3 w-full opacity-0 pointer-events-none select-none"
                 aria-hidden="true"
-                className="inline-block h-4 w-0.5 animate-pulse bg-[var(--accent)]"
-              />
-            </div>
-
-            {/* 4. Introduction Paragraph: Staggered smooth fade-up */}
-            <p
-              style={easeStyle(160)}
-              className={`mt-4 max-w-2xl text-base leading-relaxed text-[var(--text)] transform ${
-                revealed
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-5 pointer-events-none"
-              }`}
-            >
-              {introText}
-            </p>
-
-            {/* 5. Two Action Buttons: Staggered smooth glide up with matching icons */}
-            <div className="mt-7 flex flex-wrap items-center gap-4">
-              {/* Button 1: Solid Accent with ArrowUpRight icon */}
-              <a
-                href="#projects"
-                onClick={(e) => scrollToSection(e, "projects")}
-                style={easeStyle(240)}
-                className={`inline-flex items-center gap-2 rounded-[12px] bg-[var(--accent)] px-6 py-3.5 text-sm font-medium text-[var(--on-accent)] transition-colors hover:bg-[var(--accent-hover)] cursor-pointer transform ${
-                  revealed
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6 pointer-events-none"
-                }`}
               >
-                <span>{t(UI_TEXT.hero.exploreWorkCta)}</span>
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-              </a>
-
-              {/* Button 2: Border Accent with Mail icon */}
-              <a
-                href="#contact"
-                onClick={(e) => scrollToSection(e, "contact")}
-                style={easeStyle(320)}
-                className={`inline-flex items-center gap-2 rounded-[12px] border border-[var(--accent)] bg-transparent px-6 py-3.5 text-sm font-medium text-[var(--accent)] transition-colors hover:bg-[var(--surface)] cursor-pointer transform ${
-                  revealed
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6 pointer-events-none"
-                }`}
-              >
-                <Mail className="h-4 w-4" aria-hidden="true" />
-                <span>{t(UI_TEXT.hero.contactMeCta)}</span>
-              </a>
-            </div>
+                <p className="text-base font-normal sm:text-lg">
+                  {headlineText}
+                </p>
+                <div className="mt-3 flex h-7 items-center gap-2 font-mono text-xs sm:text-sm">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full" />
+                  <span>{displayedText}</span>
+                </div>
+                <p className="mt-4 max-w-2xl text-base leading-relaxed">
+                  {introText}
+                </p>
+                <div className="mt-7 flex flex-wrap items-center gap-4">
+                  <div className="h-[46px] w-36 rounded-[12px]" />
+                  <div className="h-[46px] w-36 rounded-[12px]" />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Column: Particle-to-Portrait Transition Animation */}

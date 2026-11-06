@@ -84,16 +84,19 @@ export function DeveloperJourney() {
                   >
                     <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)]/80 p-5 sm:p-6 shadow-sm backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent)]/60">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg)]/70 px-3 py-1 font-mono text-[11px] font-semibold tracking-wider text-[var(--accent)] uppercase">
-                          <Calendar className="h-3 w-3" />
+                        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium tracking-wide text-[var(--accent)]">
+                          <Calendar className="h-3.5 w-3.5" />
                           {t(stage.stageLabel)}
                         </span>
 
                         {stage.isCurrent && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-500">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            {lang === "bn" ? "বর্তমান অবস্থা" : "Active Stage"}
-                          </span>
+                          <div className="inline-flex items-center gap-2 text-xs font-medium text-emerald-500 dark:text-emerald-400">
+                            <span className="relative flex h-2 w-2">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                            </span>
+                            <span>{lang === "bn" ? "বর্তমান অবস্থা" : "Active Stage"}</span>
+                          </div>
                         )}
                       </div>
 

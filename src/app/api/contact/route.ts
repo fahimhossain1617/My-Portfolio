@@ -5,9 +5,16 @@ import {
   sanitizePlainText,
   validateContactInput,
 } from "@/lib/validation";
+import {
+  getInquiriesStats,
+  saveInquiry,
+  updateInquiryStatus,
+} from "@/lib/inquiries-store";
 
 // Fixed, server-enforced recipient email — user input can never alter this destination
 const FIXED_RECIPIENT_EMAIL = "fahimhossain1617@gmail.com";
+
+export const dynamic = "force-dynamic";
 
 // In-memory IP rate limiter (5 submissions per 10 minutes per IP)
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
@@ -42,6 +49,20 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number }
 
   existing.count += 1;
   return { allowed: true, retryAfterSec: 0 };
+}
+
+export async function GET() {
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
+  const stats = getInquiriesStats();
+
+  return NextResponse.json({
+    status: "online",
+    service: "Contact & Transactional Email API",
+    recipientEmail: FIXED_RECIPIENT_EMAIL,
+    emailProviderConfigured: Boolean(resendApiKey && resendApiKey.length > 5),
+    stats,
+    timestamp: new Date().toISOString(),
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -120,31 +141,55 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const { name, email, phone, description } = validation.sanitized;
+    const submittedAtIso = new Date().toISOString();
+    const submittedAtReadable = new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "full",
+      timeStyle: "long",
+      timeZone: "Asia/Dhaka",
+    }).format(new Date());
+
+    const inquiryId = `inq_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
+    // Store in backend vault first so user message is never lost
+    saveInquiry({
+      id: inquiryId,
+      name,
+      email,
+      phone,
+      description,
+      submittedAtIso,
+      submittedAtReadable,
+      clientIp,
+      status: "DELIVERY_PENDING",
+      resendId: null,
+    });
+
     const resendApiKey = process.env.RESEND_API_KEY?.trim();
     if (!resendApiKey) {
-      // Never fake success when email provider credentials are not configured
+      updateInquiryStatus(inquiryId, "DELIVERY_PENDING", null, "Missing RESEND_API_KEY");
       return NextResponse.json(
         {
           ok: false,
           code: "MISSING_EMAIL_CONFIG",
+          inquiryId,
           message:
-            "Server email provider is not configured yet (RESEND_API_KEY is missing in environment variables). Please configure RESEND_API_KEY in .env.local or Vercel Environment Variables, or use the direct WhatsApp / Email options below.",
+            "Server email provider is not configured yet. Your inquiry has been saved locally, but for instant response, please use direct WhatsApp.",
           messageBn:
-            "সার্ভার ইমেইল কনফিগারেশন এখনো সম্পন্ন হয়নি (এনভায়রনমেন্ট ভেরিয়েবলে RESEND_API_KEY যুক্ত করা নেই)। অনুগ্রহ করে .env.local বা Vercel-এ RESEND_API_KEY যুক্ত করুন, অথবা নিচের সরাসরি হোয়াটসঅ্যাপ / ইমেইল অপশন ব্যবহার করুন।",
+            "সার্ভার ইমেইল কনফিগারেশন এখনো সম্পন্ন হয়নি। তবে আপনার বার্তাটি সিস্টেমে সংরক্ষিত হয়েছে। দ্রুত উত্তরের জন্য সরাসরি হোয়াটসঅ্যাপে যোগাযোগ করুন।",
         },
         { status: 503 }
       );
     }
 
-    const { name, email, phone, description } = validation.sanitized;
-    const submittedAtIso = new Date().toISOString();
-
-    // Development/Test simulated delivery mode for manual verification without incurring third-party API quotas
+    // Development/Test simulated delivery mode
     if (resendApiKey === "test_mock_success") {
+      updateInquiryStatus(inquiryId, "MOCK_SUCCESS", "mock_resend_id");
       return NextResponse.json(
         {
           ok: true,
           code: "DELIVERED",
+          inquiryId,
           timestamp: submittedAtIso,
         },
         { status: 200 }
@@ -155,12 +200,6 @@ export async function POST(req: NextRequest) {
     const fromAddress =
       process.env.RESEND_FROM_EMAIL?.trim() || "onboarding@resend.dev";
 
-    const submittedAtReadable = new Intl.DateTimeFormat("en-GB", {
-      dateStyle: "full",
-      timeStyle: "long",
-      timeZone: "Asia/Dhaka",
-    }).format(new Date());
-
     // Prevent header injection in subject
     const safeSubjectName = name.replace(/[\r\n]+/g, " ").slice(0, 70);
     const subject = `New Portfolio Contact — ${safeSubjectName}`;
@@ -168,6 +207,7 @@ export async function POST(req: NextRequest) {
     const textContent = [
       `New Portfolio Inquiry for Md. Fahim Hossain`,
       `==================================================`,
+      `Inquiry Reference ID: ${inquiryId}`,
       `Visitor Name: ${name}`,
       `Visitor Email: ${email}`,
       `Visitor Phone: ${phone}`,
@@ -182,7 +222,7 @@ export async function POST(req: NextRequest) {
     const htmlContent = `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 640px; margin: 0 auto; background-color: #000000; color: #C9CAF8; border: 1px solid #23233A; border-radius: 12px; overflow: hidden;">
         <div style="background-color: #8B8CF7; padding: 20px 24px;">
-          <p style="margin: 0; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #000000; font-weight: 600;">Portfolio Contact Inquiry</p>
+          <p style="margin: 0; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #000000; font-weight: 600;">Portfolio Contact Inquiry • Ref: ${escapeHtml(inquiryId)}</p>
           <h1 style="margin: 6px 0 0; font-size: 20px; color: #000000;">New Message from ${escapeHtml(name)}</h1>
         </div>
         <div style="padding: 24px; background-color: #0B0B12;">
@@ -200,7 +240,7 @@ export async function POST(req: NextRequest) {
               <td style="padding: 8px 0; color: #EEF0FF; font-size: 14px;">${escapeHtml(phone)}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; color: #8A8BB0; font-size: 13px;">Timestamp</td>
+              <td style="padding: 8px 0; color: #8A8BB0; font-size: 13px;">Timestamp (Dhaka)</td>
               <td style="padding: 8px 0; color: #EEF0FF; font-size: 13px;">${escapeHtml(submittedAtReadable)}</td>
             </tr>
           </table>
@@ -222,36 +262,45 @@ export async function POST(req: NextRequest) {
     });
 
     if (error || !data?.id) {
+      const errMsg = error?.message || "Provider rejection";
+      updateInquiryStatus(inquiryId, "FAILED", null, errMsg);
       return NextResponse.json(
         {
           ok: false,
           code: "PROVIDER_DELIVERY_FAILED",
+          inquiryId,
           message:
-            "The email service rejected the delivery request. Please verify your Resend sender configuration or try again shortly.",
+            "The email delivery service could not complete the request, but your inquiry was saved to our system. You can also chat directly on WhatsApp.",
           messageBn:
-            "ইমেইল সার্ভিস বার্তাটি পাঠাতে পারেনি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন অথবা সরাসরি হোয়াটসঅ্যাপে যোগাযোগ করুন।",
+            "ইমেইল সার্ভিস বার্তাটি পাঠাতে পারেনি, তবে আপনার বার্তাটি সিস্টেমে সংরক্ষিত হয়েছে। আপনি চাইলে সরাসরি হোয়াটসঅ্যাপেও মেসেজ পাঠাতে পারেন।",
         },
         { status: 502 }
       );
     }
 
+    updateInquiryStatus(inquiryId, "DELIVERED_VIA_EMAIL", data.id);
+
     return NextResponse.json(
       {
         ok: true,
         code: "DELIVERED",
+        inquiryId,
+        resendId: data.id,
         timestamp: submittedAtIso,
       },
       { status: 200 }
     );
-  } catch {
+  } catch (err: unknown) {
+    const errorDetails = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(
       {
         ok: false,
         code: "INTERNAL_ERROR",
+        details: errorDetails,
         message:
-          "An unexpected server error occurred while sending your message. Please try again.",
+          "An unexpected server error occurred while sending your message. Please try again or reach out on WhatsApp.",
         messageBn:
-          "সার্ভারে একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+          "সার্ভারে একটি অপ্রত্যাশিত ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন অথবা হোয়াটসঅ্যাপে যোগাযোগ করুন।",
       },
       { status: 500 }
     );

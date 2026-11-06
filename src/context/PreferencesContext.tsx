@@ -48,6 +48,7 @@ export function PreferencesProvider({
       if (savedTheme === "dark" || savedTheme === "light") {
         setThemeState(savedTheme);
         document.documentElement.setAttribute("data-theme", savedTheme);
+        document.documentElement.classList.toggle("dark", savedTheme === "dark");
       } else {
         const prefersLight =
           typeof window !== "undefined" &&
@@ -56,6 +57,7 @@ export function PreferencesProvider({
         const initialTheme: Theme = prefersLight ? "light" : "dark";
         setThemeState(initialTheme);
         document.documentElement.setAttribute("data-theme", initialTheme);
+        document.documentElement.classList.toggle("dark", initialTheme === "dark");
       }
 
       const savedLang = window.localStorage.getItem(
@@ -72,86 +74,72 @@ export function PreferencesProvider({
     }
   }, []);
 
+  const executeWithTransition = (updateFn: () => void) => {
+    if (
+      typeof document !== "undefined" &&
+      "startViewTransition" in document &&
+      typeof (document as unknown as { startViewTransition?: (cb: () => void) => void }).startViewTransition === "function"
+    ) {
+      (document as unknown as { startViewTransition: (cb: () => void) => void }).startViewTransition(updateFn);
+    } else {
+      updateFn();
+    }
+  };
+
   const setTheme = useCallback((nextTheme: Theme) => {
-    const currentScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-    setThemeState(nextTheme);
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    try {
-      window.localStorage.setItem(STORAGE_THEME_KEY, nextTheme);
-    } catch {
-      // Ignore storage errors
-    }
-    if (typeof window !== "undefined") {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: currentScrollY,
-          behavior: "instant" as ScrollBehavior,
-        });
-      });
-    }
+    executeWithTransition(() => {
+      setThemeState(nextTheme);
+      document.documentElement.setAttribute("data-theme", nextTheme);
+      document.documentElement.classList.toggle("dark", nextTheme === "dark");
+      try {
+        window.localStorage.setItem(STORAGE_THEME_KEY, nextTheme);
+      } catch {
+        // Ignore storage errors
+      }
+    });
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const currentScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-    setThemeState((prev) => {
-      const next = prev === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", next);
-      try {
-        window.localStorage.setItem(STORAGE_THEME_KEY, next);
-      } catch {
-        // Ignore
-      }
-      return next;
-    });
-    if (typeof window !== "undefined") {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: currentScrollY,
-          behavior: "instant" as ScrollBehavior,
-        });
+    executeWithTransition(() => {
+      setThemeState((prev) => {
+        const next = prev === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        document.documentElement.classList.toggle("dark", next === "dark");
+        try {
+          window.localStorage.setItem(STORAGE_THEME_KEY, next);
+        } catch {
+          // Ignore
+        }
+        return next;
       });
-    }
+    });
   }, []);
 
   const setLang = useCallback((nextLang: Language) => {
-    const currentScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-    setLangState(nextLang);
-    document.documentElement.lang = nextLang;
-    try {
-      window.localStorage.setItem(STORAGE_LANG_KEY, nextLang);
-    } catch {
-      // Ignore
-    }
-    if (typeof window !== "undefined") {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: currentScrollY,
-          behavior: "instant" as ScrollBehavior,
-        });
-      });
-    }
-  }, []);
-
-  const toggleLanguage = useCallback(() => {
-    const currentScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-    setLangState((prev) => {
-      const next = prev === "en" ? "bn" : "en";
-      document.documentElement.lang = next;
+    executeWithTransition(() => {
+      setLangState(nextLang);
+      document.documentElement.lang = nextLang;
       try {
-        window.localStorage.setItem(STORAGE_LANG_KEY, next);
+        window.localStorage.setItem(STORAGE_LANG_KEY, nextLang);
       } catch {
         // Ignore
       }
-      return next;
     });
-    if (typeof window !== "undefined") {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: currentScrollY,
-          behavior: "instant" as ScrollBehavior,
-        });
+  }, []);
+
+  const toggleLanguage = useCallback(() => {
+    executeWithTransition(() => {
+      setLangState((prev) => {
+        const next = prev === "en" ? "bn" : "en";
+        document.documentElement.lang = next;
+        try {
+          window.localStorage.setItem(STORAGE_LANG_KEY, next);
+        } catch {
+          // Ignore
+        }
+        return next;
       });
-    }
+    });
   }, []);
 
   const t = useCallback(

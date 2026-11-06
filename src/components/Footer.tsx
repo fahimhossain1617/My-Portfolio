@@ -1,122 +1,309 @@
 "use client";
 
-import React from "react";
-import { Mail, MapPin } from "lucide-react";
+import React, { useState } from "react";
+import { Mail, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { usePreferences } from "@/context/PreferencesContext";
 import { PERSONAL_INFO } from "@/data/portfolio";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "./BrandIcons";
+import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
 
 export function Footer() {
-  const { lang, t } = usePreferences();
+  const { lang, t, theme } = usePreferences();
   const currentYear = new Date().getFullYear();
+  const [isCtaHovered, setIsCtaHovered] = useState(false);
+  const isLight = theme === "light";
+
+  const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsCtaHovered(true);
+    // Allow the delightful liquid wave surge to visibly animate before smooth scroll
+    setTimeout(() => {
+      const el = document.getElementById("contact");
+      if (el) {
+        const headerOffset = 80;
+        const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+        window.history.replaceState(null, "", "#contact");
+      }
+      setTimeout(() => setIsCtaHovered(false), 900);
+    }, 240);
+  };
 
   return (
-    <footer className="relative z-[1] border-t border-[var(--border)] bg-[var(--bg)] pt-14 pb-32 sm:pb-24 md:pb-14">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-12">
-          {/* Column 1 — Identity, Education, Location & Availability (7 cols) */}
-          <div className="md:col-span-7">
-            <h3 className="text-xl font-normal tracking-tight text-[var(--heading)] sm:text-2xl">
-              {t(PERSONAL_INFO.fullName)}
-            </h3>
+    <footer className="relative z-[1] overflow-hidden bg-[var(--bg)] pt-20 pb-28 sm:pb-20 md:pb-16">
+      {/* 1. Smoky Top Transition (Seamless smoky fade instead of sharp horizontal border) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[var(--bg)] via-[var(--bg)]/90 to-transparent z-10"
+      />
 
-            <p className="mt-1.5 text-sm font-normal text-[var(--accent)]">
-              {t(PERSONAL_INFO.headline)}
-            </p>
+      {/* 2. Ambient Panoramic Hands & Core Visual (Subtle, toned-down highlights in light mode) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-16 sm:top-20 h-[320px] sm:h-[380px] overflow-hidden select-none"
+      >
+        <img
+          src="/images/hands-together-wide.jpg"
+          alt=""
+          className={`h-full w-full object-cover object-center transition-all duration-700 ${
+            isLight
+              ? "opacity-[0.035] contrast-[0.8] brightness-[0.5] invert sepia-0 saturate-0"
+              : "opacity-18 contrast-100 brightness-100 invert-0 sepia saturate-[260%] hue-rotate-[205deg]"
+          }`}
+          style={{
+            maskImage:
+              "radial-gradient(ellipse 70% 50% at 50% 55%, black 10%, transparent 75%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 70% 50% at 50% 55%, black 10%, transparent 75%)",
+          }}
+        />
+        {/* Soft Radial Ambient Glow in Theme Accent Color */}
+        <div
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
+            isLight ? "opacity-[0.05]" : "opacity-16"
+          }`}
+          style={{
+            background:
+              "radial-gradient(circle at 50% 55%, var(--accent) 0%, transparent 65%)",
+          }}
+        />
+      </div>
 
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-[var(--text)]">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        {/* Top Centered Section: Let's Build Products Together */}
+        <AgentBuildWrapper
+          agentName="CTA_Architect"
+          color="#8B8CF7"
+          delay={0.02}
+          badgeText="Footer • Collaboration"
+          dimensionText="880 × 160"
+          agentCount={2}
+          className="w-full mb-12 sm:mb-14"
+        >
+          <div className="flex flex-col items-center justify-center text-center">
+            {/* Heading: Pure text, Centered, No box shape, No icon in front */}
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light tracking-tight text-[var(--heading)]">
               {lang === "bn"
-                ? "কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিংয়ের শিক্ষার্থী ও ফুল-স্ট্যাক ওয়েব ডেভেলপার। আধুনিক ওয়েব অ্যাপ্লিকেশন এবং এআই অটোমেশন নিয়ে কাজ করছি।"
-                : "Computer Science & Engineering undergraduate focused on engineering clean, scalable full-stack web applications and AI-augmented workflows."}
+                ? "একত্রে কাজ করি, নতুন প্রজেক্ট গড়ি"
+                : "Let's Build Products Together"}
+            </h2>
+
+            {/* High-Contrast, Crystal-Clear Subtitle using official UI theme token */}
+            <p className="mt-4 max-w-xl text-xs sm:text-sm leading-relaxed text-[var(--text)] font-normal sm:font-medium relative z-20">
+              {lang === "bn"
+                ? "নতুন কোনো প্রজেক্টের আইডিয়া বাস্তবায়ন করতে চান, টিমে একজন ডেডিকেটেড ফুল-স্ট্যাক ডেভেলপার প্রয়োজন, নাকি এআই অটোমেশন নিয়ে কাজ করতে আগ্রহী? চলুন আলোচনা করি এবং একসাথে বাস্তবমুখী কিছু তৈরি করি।"
+                : "Have an ambitious project in mind, need a dedicated full-stack engineer on your team, or exploring AI-driven automation? I'm always open to discussing new opportunities and building impactful products together."}
             </p>
 
-            <div className="mt-4 flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-[var(--muted)]">
-              <span>{t(PERSONAL_INFO.education.degree)}</span>
-              <span>•</span>
-              <span>{t(PERSONAL_INFO.education.institution)}</span>
-            </div>
-
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--text)]">
-                <MapPin className="h-3.5 w-3.5 text-[var(--accent)]" aria-hidden="true" />
-                <span>Dhaka, Bangladesh</span>
-              </span>
-
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-[11px] font-normal text-[var(--text)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                <span>{lang === "bn" ? "নতুন প্রজেক্টের জন্য প্রস্তুত" : "Available for projects"}</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Column 2 — Contact & Social Channels (5 cols) */}
-          <div className="md:col-span-5">
-            <h4 className="font-mono text-xs font-medium tracking-wider text-[var(--heading)] uppercase">
-              {lang === "bn" ? "যোগাযোগ ও সোশ্যাল প্রোফাইল" : "Connect & Reach Out"}
-            </h4>
-
-            <ul className="mt-4 space-y-3.5 text-sm">
-              {/* Email */}
-              <li>
-                <a
-                  href={`mailto:${PERSONAL_INFO.contact.email}`}
-                  className="group inline-flex items-center gap-3 text-[var(--text)] transition-colors hover:text-[var(--accent)] hover:underline"
+            {/* Smooth Liquid Water Wave Fill Button (Undulating Waves that visibly rise on hover or touch) */}
+            <div className="mt-8 flex items-center justify-center">
+              <a
+                href="#contact"
+                onClick={handleCtaClick}
+                onMouseEnter={() => setIsCtaHovered(true)}
+                onMouseLeave={() => setIsCtaHovered(false)}
+                onTouchStart={() => setIsCtaHovered(true)}
+                onTouchEnd={() => {
+                  setTimeout(() => setIsCtaHovered(false), 900);
+                }}
+                onTouchCancel={() => setIsCtaHovered(false)}
+                onPointerDown={() => setIsCtaHovered(true)}
+                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border border-[var(--border)] bg-[var(--surface)] px-10 sm:px-12 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent)] hover:shadow-[0_0_28px_rgba(139,140,247,0.22)] active:border-[var(--accent)] cursor-pointer select-none active:scale-[0.98]"
+              >
+                {/* Liquid Water Container rising smoothly on hover or mobile touch */}
+                <motion.div
+                  initial={false}
+                  animate={{
+                    y: isCtaHovered ? "0%" : "105%",
+                  }}
+                  transition={{
+                    duration: 0.65,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-full"
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden="true" />
-                  <span className="truncate">{PERSONAL_INFO.contact.email}</span>
-                </a>
-              </li>
-
-              {/* WhatsApp */}
-              <li>
-                <a
-                  href={PERSONAL_INFO.contact.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 text-[var(--text)] transition-colors hover:text-[var(--accent)] hover:underline"
-                >
-                  <WhatsAppIcon size={18} className="shrink-0 text-[var(--accent)]" />
-                  <span>WhatsApp</span>
-                </a>
-              </li>
-
-              {/* LinkedIn */}
-              <li>
-                <a
-                  href={PERSONAL_INFO.contact.linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 text-[var(--text)] transition-colors hover:text-[var(--accent)] hover:underline"
-                >
-                  <LinkedInIcon size={18} className="shrink-0 text-[var(--accent)]" />
-                  <span>linkedin.com/in/md-fahim-hossain-cse</span>
-                </a>
-              </li>
-
-              {/* GitHub */}
-              {PERSONAL_INFO.contact.githubUrl && (
-                <li>
-                  <a
-                    href={PERSONAL_INFO.contact.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-3 text-[var(--text)] transition-colors hover:text-[var(--accent)] hover:underline"
+                  {/* Secondary Water Wave (Continuous horizontal liquid wave motion) */}
+                  <motion.div
+                    animate={{
+                      x: [0, -300],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      duration: 3.2,
+                      ease: "linear",
+                    }}
+                    className="absolute -top-7 left-0 flex w-[600px] pointer-events-none"
                   >
-                    <GitHubIcon size={18} className="shrink-0 text-[var(--heading)]" />
-                    <span>github.com/fahimhosen1617</span>
-                  </a>
-                </li>
-              )}
-            </ul>
+                    <svg
+                      className="h-8 w-[300px] shrink-0 fill-[var(--accent)] opacity-40"
+                      viewBox="0 0 300 32"
+                      preserveAspectRatio="none"
+                    >
+                      <path d="M 0 16 Q 75 0, 150 16 T 300 16 L 300 32 L 0 32 Z" />
+                    </svg>
+                    <svg
+                      className="h-8 w-[300px] shrink-0 fill-[var(--accent)] opacity-40"
+                      viewBox="0 0 300 32"
+                      preserveAspectRatio="none"
+                    >
+                      <path d="M 0 16 Q 75 0, 150 16 T 300 16 L 300 32 L 0 32 Z" />
+                    </svg>
+                  </motion.div>
+
+                  {/* Primary Water Wave (Continuous undulating liquid crest) */}
+                  <motion.div
+                    animate={{
+                      x: [-300, 0],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      duration: 2.2,
+                      ease: "linear",
+                    }}
+                    className="absolute -top-6 left-0 flex w-[600px] pointer-events-none"
+                  >
+                    <svg
+                      className="h-7 w-[300px] shrink-0 fill-[var(--accent)]"
+                      viewBox="0 0 300 28"
+                      preserveAspectRatio="none"
+                    >
+                      <path d="M 0 14 Q 75 28, 150 14 T 300 14 L 300 28 L 0 28 Z" />
+                    </svg>
+                    <svg
+                      className="h-7 w-[300px] shrink-0 fill-[var(--accent)]"
+                      viewBox="0 0 300 28"
+                      preserveAspectRatio="none"
+                    >
+                      <path d="M 0 14 Q 75 28, 150 14 T 300 14 L 300 28 L 0 28 Z" />
+                    </svg>
+                  </motion.div>
+
+                  {/* Solid Water Body */}
+                  <div className="absolute inset-0 bg-[var(--accent)]" />
+                </motion.div>
+
+                {/* Button Text & Arrow Layer */}
+                <span
+                  className={`relative z-10 text-sm font-medium tracking-wide transition-colors duration-300 ${
+                    isCtaHovered ? "text-[var(--on-accent)]" : "text-[var(--heading)]"
+                  }`}
+                >
+                  {lang === "bn" ? "একত্রে কাজ শুরু করুন" : "Let's Build Together"}
+                </span>
+
+                <ArrowUpRight
+                  className={`relative z-10 h-4 w-4 transition-all duration-300 ${
+                    isCtaHovered
+                      ? "translate-x-1 -translate-y-1 text-[var(--on-accent)]"
+                      : "text-[var(--accent)]"
+                  }`}
+                />
+              </a>
+            </div>
+          </div>
+        </AgentBuildWrapper>
+
+        {/* 3. Social Channels: Centered in the middle (No dividing line above) */}
+        <AgentBuildWrapper
+          agentName="Channel_Bar"
+          color="#38BDF8"
+          delay={0.08}
+          badgeText="Footer • Channels"
+          dimensionText="100% × 45"
+          agentCount={2}
+          className="w-full mb-10"
+        >
+          <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3.5 text-xs sm:text-sm text-center">
+            {/* Email */}
+            <li>
+              <a
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PERSONAL_INFO.contact.email)}&su=${encodeURIComponent("Project Inquiry / Collaboration")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={lang === "bn" ? "সরাসরি জিমেইলে লিখুন" : "Compose in Gmail"}
+                className="group inline-flex items-center gap-2 text-[var(--text)] transition-colors hover:text-[var(--accent)] hover:underline"
+              >
+                <Mail className="h-4 w-4 shrink-0 text-[var(--accent)]" aria-hidden="true" />
+                <span className="truncate">{PERSONAL_INFO.contact.email}</span>
+              </a>
+            </li>
+
+            {/* WhatsApp */}
+            <li>
+              <a
+                href={PERSONAL_INFO.contact.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 text-[var(--text)] transition-colors hover:text-[#25D366] hover:underline"
+              >
+                <WhatsAppIcon size={16} className="shrink-0 text-[var(--accent)] group-hover:text-[#25D366] transition-colors" />
+                <span>{PERSONAL_INFO.contact.whatsappName}</span>
+              </a>
+            </li>
+
+            {/* LinkedIn */}
+            <li>
+              <a
+                href={PERSONAL_INFO.contact.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 text-[var(--text)] transition-colors hover:text-[var(--accent)] hover:underline"
+              >
+                <LinkedInIcon size={16} className="shrink-0 text-[var(--accent)]" />
+                <span>{PERSONAL_INFO.contact.linkedinUsername}</span>
+              </a>
+            </li>
+
+            {/* GitHub */}
+            {PERSONAL_INFO.contact.githubUrl && (
+              <li>
+                <a
+                  href={PERSONAL_INFO.contact.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 text-[var(--text)] transition-colors hover:text-[var(--heading)] hover:underline"
+                >
+                  <GitHubIcon size={16} className="shrink-0 text-[var(--heading)]" />
+                  <span>{PERSONAL_INFO.contact.githubUsername}</span>
+                </a>
+              </li>
+            )}
+          </ul>
+        </AgentBuildWrapper>
+
+        {/* 4. "Available for projects": Positioned right above the copyright line */}
+        <div className="flex items-center justify-center mb-5">
+          <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[var(--text)]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            <span className="text-emerald-500 dark:text-emerald-400">
+              {lang === "bn" ? "নতুন প্রজেক্টের জন্য প্রস্তুত" : "Available for projects"}
+            </span>
           </div>
         </div>
 
-        {/* Bottom Copyright Bar */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-[var(--border)] pt-6 text-xs text-[var(--muted)] sm:flex-row sm:items-center">
-          <p>
-            © {currentYear} {t(PERSONAL_INFO.fullName)}. {lang === "bn" ? "সর্বস্বত্ব সংরক্ষিত।" : "All rights reserved."}
-          </p>
-        </div>
+        {/* 5. Copyright Bar: Clean, Centered, No horizontal dividing line */}
+        <AgentBuildWrapper
+          agentName="System_Engine"
+          color="#10B981"
+          delay={0.14}
+          amount={0.05}
+          badgeText="Footer • Copyright"
+          dimensionText="100% × 30"
+          agentCount={2}
+          className="w-full"
+        >
+          <div className="flex items-center justify-center text-center text-xs text-[var(--muted)]">
+            <p>
+              © {currentYear} {t(PERSONAL_INFO.fullName)}. {lang === "bn" ? "সর্বস্বত্ব সংরক্ষিত।" : "All rights reserved."}
+            </p>
+          </div>
+        </AgentBuildWrapper>
       </div>
     </footer>
   );
