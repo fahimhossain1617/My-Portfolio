@@ -48,6 +48,8 @@ export function CommandPalette() {
       const top = el.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
       window.history.replaceState(null, "", `#${sectionId}`);
+    } else {
+      window.location.href = sectionId === "home" ? "/" : `/#${sectionId}`;
     }
   };
 
@@ -75,6 +77,15 @@ export function CommandPalette() {
       label: `${t(UI_TEXT.nav.projects)}`,
       category: lang === "bn" ? "নেভিগেশন" : "Navigation",
       action: () => jumpTo("projects"),
+    },
+    {
+      id: "nav-all-projects",
+      label: lang === "bn" ? "সকল প্রজেক্ট দেখুন (All 5 Projects Page)" : "View All Projects (All 5 Projects Page)",
+      category: lang === "bn" ? "প্রজেক্ট" : "Projects",
+      action: () => {
+        closePalette();
+        window.location.href = "/projects";
+      },
     },
     {
       id: "nav-journey",

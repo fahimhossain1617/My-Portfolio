@@ -484,19 +484,6 @@ export function HeroParticlePortrait({
     };
   }, [src, initParticles, runAnimation]);
 
-  const handleReplay = () => {
-    const canvas = canvasRef.current;
-    const img = imageElementRef.current;
-    if (!canvas || !img || !isImageLoadedRef.current) return;
-
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-
-    initParticles(img, canvas.width, canvas.height);
-    runAnimation();
-  };
-
   // Gentle, subtle bottom mask only at the very bottom cut edge (pants & belt fully visible)
   const portraitMaskStyle: React.CSSProperties = {
     WebkitMaskImage:
@@ -508,9 +495,7 @@ export function HeroParticlePortrait({
   return (
     <div
       ref={containerRef}
-      onClick={handleReplay}
-      title="Click to replay particle animation"
-      className="group relative mx-auto flex aspect-square w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[370px] lg:max-w-[410px] items-center justify-center overflow-visible bg-transparent cursor-pointer select-none"
+      className="group relative mx-auto flex aspect-square w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[370px] lg:max-w-[410px] items-center justify-center overflow-visible bg-transparent select-none"
     >
       {/* Subtle Ambient UI-Accent Aura Behind Portrait */}
       <div
@@ -561,20 +546,6 @@ export function HeroParticlePortrait({
             "radial-gradient(ellipse 85% 90% at 50% 90%, var(--bg) 40%, transparent 100%)",
         }}
       />
-
-      {/* Minimal Replay Trigger Icon */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleReplay();
-        }}
-        title="Replay Animation"
-        aria-label="Replay particle transition animation"
-        className="absolute bottom-3 right-3 z-30 inline-flex h-8 w-8 items-center justify-center rounded-full text-[var(--muted)] opacity-0 transition-all duration-200 group-hover:opacity-80 hover:!opacity-100 hover:text-[var(--accent)] cursor-pointer"
-      >
-        <RotateCw className="h-4 w-4" />
-      </button>
     </div>
   );
 }

@@ -51,3 +51,87 @@ export function GitHubIcon({ size = 20, className = "", ...props }: IconProps) {
     </svg>
   );
 }
+
+/**
+ * Custom Skills Icon (Reference Image 1):
+ * Half Lightbulb (left) + Half Engineering Gear (right) with inner core gear & radiating rays.
+ * Clean, balanced geometry designed for crisp rendering at 20px-22px.
+ */
+export function SkillsBulbGearIcon({ size = 21, className = "", ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.85}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+      {...props}
+    >
+      {/* 5 Radiating Idea Rays */}
+      <line x1="12" y1="1.8" x2="12" y2="3.8" />
+      <line x1="5.2" y1="4.4" x2="6.7" y2="5.9" />
+      <line x1="18.8" y1="4.4" x2="17.3" y2="5.9" />
+      <line x1="2.2" y1="11.2" x2="4.2" y2="11.2" />
+      <line x1="19.8" y1="11.2" x2="21.8" y2="11.2" />
+
+      {/* Left Half: Smooth Lightbulb Contour */}
+      <path d="M12 6.4a5.4 5.4 0 0 0-5.4 5.4c0 1.85.85 3.3 1.85 4.45.45.52.75 1.15.85 1.75h2.7" />
+
+      {/* Right Half: Sculpted Outer Gear Teeth Arch */}
+      <path
+        fill="currentColor"
+        stroke="none"
+        d="M12.3 6.1c.48 0 .95.08 1.4.22l.65-.92a.55.55 0 0 1 .76-.13l1.02.74c.24.18.3.52.14.77l-.62.95c.35.42.63.9.82 1.42l1.12-.12c.3-.03.57.18.62.48l.22 1.24c.05.3-.14.58-.44.65l-1.1.25c-.04.55-.18 1.08-.42 1.56l.84.76c.22.2.25.54.06.77l-.82.98a.55.55 0 0 1-.77.08l-.86-.72a5.2 5.2 0 0 1-1.32.68l.12 1.05a.55.55 0 0 1-.48.61l-1.22.14a.55.55 0 0 1-.6-.48l-.08-.85v-1.7a3.2 3.2 0 0 0 0-6.4V6.1Z"
+      />
+
+      {/* Inner Precision Gear Core */}
+      <circle cx="12" cy="11.7" r="1.75" strokeWidth={1.65} />
+      <path
+        d="M12 9.1v.7M12 13.6v.7M9.4 11.7h.7M13.9 11.7h.7M10.15 9.85l.5.5M13.35 13.05l.5.5M13.85 9.85l-.5.5M10.65 13.05l-.5.5"
+        strokeWidth={1.5}
+      />
+
+      {/* Bulb Base Lines */}
+      <line x1="9.3" y1="20.2" x2="14.7" y2="20.2" />
+      <line x1="10.4" y1="22.2" x2="13.6" y2="22.2" />
+    </svg>
+  );
+}
+
+/**
+ * Custom Developer Journey Icon (Reference Image 2):
+ * Person climbing a 3-step staircase — clean, modern stroke geometry.
+ */
+export function JourneyStairsIcon({ size = 21, className = "", ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.85}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+      {...props}
+    >
+      {/* Person Head */}
+      <circle cx="10.2" cy="4.2" r="2.1" />
+
+      {/* Person Climbing Body, Arms & Stepping Legs */}
+      <path d="M5.2 11.2 6.4 8.2 9.8 7.5 12.6 9.8 14.8 9" />
+      <path d="M9.8 7.5 8.8 12.2 12.4 13.4 12.4 16.5" />
+      <path d="M8.8 12.2 7.2 17.8" />
+
+      {/* 3-Step Career Progression Staircase */}
+      <path d="M4.5 21.2h16.5v-7.2h-4.8v3.6h-4.8v3.6H4.5Z" />
+    </svg>
+  );
+}

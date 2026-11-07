@@ -17,17 +17,21 @@ export async function GET(req: NextRequest) {
         liveUrl: process.env.FOCENTIA_LIVE_URL || process.env.NEXT_PUBLIC_FOCENTIA_URL,
         githubUrl: process.env.FOCENTIA_GITHUB_URL,
       },
-      "ecommerce-website": {
-        liveUrl: process.env.AURUM_LIVE_URL || process.env.NEXT_PUBLIC_AURUM_URL,
-        githubUrl: process.env.AURUM_GITHUB_URL,
+      ecommerce: {
+        liveUrl: process.env.ECOMMERCE_LIVE_URL || process.env.NEXT_PUBLIC_ECOMMERCE_URL,
+        githubUrl: process.env.ECOMMERCE_GITHUB_URL,
       },
-      "isp-website": {
-        liveUrl: process.env.ISP_LIVE_URL || process.env.NEXT_PUBLIC_ISP_URL,
-        githubUrl: process.env.ISP_GITHUB_URL,
+      "logic-lab": {
+        liveUrl: process.env.LOGIC_LAB_LIVE_URL || process.env.NEXT_PUBLIC_LOGIC_LAB_URL,
+        githubUrl: process.env.LOGIC_LAB_GITHUB_URL,
       },
-      "radiation-coaching-website": {
+      "radiation-coaching": {
         liveUrl: process.env.RADIATION_LIVE_URL || process.env.NEXT_PUBLIC_RADIATION_URL,
         githubUrl: process.env.RADIATION_GITHUB_URL,
+      },
+      "internet-service": {
+        liveUrl: process.env.ISP_LIVE_URL || process.env.NEXT_PUBLIC_ISP_URL,
+        githubUrl: process.env.ISP_GITHUB_URL,
       },
     };
 

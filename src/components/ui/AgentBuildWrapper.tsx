@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 export interface AgentSpec {
@@ -24,6 +24,7 @@ export interface AgentBuildWrapperProps {
   amount?: number;
   agentCount?: 2 | 3;
   additionalAgents?: AgentSpec[];
+  disabled?: boolean;
 }
 
 interface CursorTrajectory {
@@ -31,11 +32,6 @@ interface CursorTrajectory {
   top: string[];
 }
 
-/**
- * High-energy, realistic multi-cursor trajectories.
- * First waypoint grabs & pulls the box into place; subsequent waypoints dart
- * rapidly around the edges, corners, and text lines ("চারোদিকে ছোটাছুটি করছে").
- */
 const CHOREOGRAPHY_PRESETS: {
   pullFrom: { x: number; y: number };
   c1: CursorTrajectory;
@@ -97,17 +93,8 @@ function hashSeed(input: string): number {
   return h;
 }
 
-/**
- * Reusable Collaborative AI Multi-Cursor Build Wrapper.
- *
- * - Instant, physical pull-in build: Cursors grab the element and pull it
- *   directly into place cleanly (no slow fade, no blurry wait).
- * - Upright, crisp cursor physics: Cursors stay upright (zero cartoon tilt)
- *   and dart rapidly around the borders, corners, and text lines.
- * - Plays strictly ONCE when scrolling down on page visit / refresh;
- *   never re-triggers when scrolling back up.
- * - 100% matched to Light Mode & Dark Mode UI theme variables.
- */
+const globalAnimatedSeeds = new Set<number>();
+
 export function AgentBuildWrapper({
   children,
   agentName = "Code_Agent",
@@ -121,17 +108,36 @@ export function AgentBuildWrapper({
   amount = 0.12,
   agentCount = 3,
   additionalAgents,
+  disabled = false,
 }: AgentBuildWrapperProps) {
   const shouldReduceMotion = useReducedMotion();
-
-  if (shouldReduceMotion) {
-    return <div className={`relative ${className}`}>{children}</div>;
-  }
-
   const seed = hashSeed(`${agentName}-${badgeText || ""}-${dimensionText || ""}`);
+  
+  // Hydration-safe state: starts false on both server and client to avoid hydration mismatch
+  const [canAnimate, setCanAnimate] = useState(false);
+
+  useEffect(() => {
+    if (disabled || shouldReduceMotion) return;
+    try {
+      const alreadyPlayed = sessionStorage.getItem(`agent_built_${seed}`);
+      if (!alreadyPlayed && !globalAnimatedSeeds.has(seed)) {
+        setCanAnimate(true);
+      }
+    } catch {
+      // Fallback: don't animate if storage is inaccessible
+    }
+  }, [seed, disabled, shouldReduceMotion]);
+
+  const markCompleted = () => {
+    globalAnimatedSeeds.add(seed);
+    try {
+      sessionStorage.setItem(`agent_built_${seed}`, "true");
+    } catch {}
+    setCanAnimate(false);
+  };
+
   const preset = CHOREOGRAPHY_PRESETS[seed % CHOREOGRAPHY_PRESETS.length];
 
-  // Cohesive Light/Dark UI theme color slots (--agent-1, --agent-2, --agent-3)
   const paletteSlots = [
     { bg: "var(--agent-1)", fg: "var(--agent-1-fg)" },
     { bg: "var(--agent-2)", fg: "var(--agent-2-fg)" },
@@ -169,10 +175,8 @@ export function AgentBuildWrapper({
     tag: additionalAgents?.[1]?.tag || "Write • DOM",
   };
 
-  // Very slight stagger (max 30ms) so elements respond immediately when scrolling
   const snappyDelay = Math.min(delay * 0.12, 0.03);
 
-  // Overlay Box Variant (Pulled into place, holds briefly, cleanly fades away)
   const boxVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -194,7 +198,6 @@ export function AgentBuildWrapper({
     },
   };
 
-  // Fast Construction Sweep Highlight
   const sweepVariants: Variants = {
     hidden: { opacity: 0.95, scaleX: 0.08 },
     visible: {
@@ -208,7 +211,6 @@ export function AgentBuildWrapper({
     },
   };
 
-  // Cursor 1: Primary Swarm Cursor
   const cursor1Variants: Variants = {
     hidden: {
       opacity: 0,
@@ -241,7 +243,6 @@ export function AgentBuildWrapper({
     },
   };
 
-  // Cursor 2: Secondary Swarm Cursor
   const cursor2Variants: Variants = {
     hidden: {
       opacity: 0,
@@ -274,7 +275,6 @@ export function AgentBuildWrapper({
     },
   };
 
-  // Cursor 3: Tertiary Swarm Cursor
   const cursor3Variants: Variants = {
     hidden: {
       opacity: 0,
@@ -307,7 +307,6 @@ export function AgentBuildWrapper({
     },
   };
 
-  // Child Content: Physical Pull-In by Cursors
   const contentVariants: Variants = {
     hidden: {
       opacity: 0,
@@ -321,38 +320,31 @@ export function AgentBuildWrapper({
       y: 0,
       scale: 1,
       transition: {
-        opacity: {
-          duration: 0.12,
-          delay: snappyDelay,
-          ease: "linear",
-        },
-        x: {
-          duration: 0.32,
-          delay: snappyDelay,
-          ease: "easeOut",
-        },
-        y: {
-          duration: 0.32,
-          delay: snappyDelay,
-          ease: "easeOut",
-        },
-        scale: {
-          duration: 0.32,
-          delay: snappyDelay,
-          ease: "easeOut",
-        },
+        opacity: { duration: 0.12, delay: snappyDelay, ease: "linear" },
+        x: { duration: 0.32, delay: snappyDelay, ease: "easeOut" },
+        y: { duration: 0.32, delay: snappyDelay, ease: "easeOut" },
+        scale: { duration: 0.32, delay: snappyDelay, ease: "easeOut" },
       },
     },
   };
+
+  // If already animated or animation disabled, render stable static wrapper (exact same DOM tag & classes)
+  if (!canAnimate) {
+    return (
+      <div className={`relative max-w-full group/agent ${className}`}>
+        <div className="relative z-10 w-full">{children}</div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
+      onAnimationComplete={markCompleted}
       viewport={{ once, amount, margin: "0px 0px -24px 0px" }}
       className={`relative max-w-full group/agent ${className}`}
     >
-      {/* Active Multi-Cursor Swarm & Wireframe Bounding Box (Runs strictly once on view) */}
       <motion.div
         variants={boxVariants}
         style={{
@@ -364,7 +356,6 @@ export function AgentBuildWrapper({
         className="pointer-events-none absolute inset-0 z-30 rounded-[inherit]"
         aria-hidden="true"
       >
-        {/* Construction / Text-Writing Sweep Highlight */}
         <motion.div
           variants={sweepVariants}
           style={{
@@ -375,7 +366,6 @@ export function AgentBuildWrapper({
           className="pointer-events-none absolute inset-0 rounded-[inherit]"
         />
 
-        {/* 4 Crisp Corner Resize Handles */}
         <span
           className="pointer-events-none absolute -top-1 -left-1 h-2 w-2 rounded-[1.5px] border"
           style={{
@@ -405,7 +395,6 @@ export function AgentBuildWrapper({
           }}
         />
 
-        {/* Top-Left Frame Construction Tag */}
         <div
           className="pointer-events-none absolute -top-4 left-0 flex max-w-[calc(100%-12px)] items-center gap-1 rounded-t-[4px] px-1.5 py-0.5 font-mono text-[8.5px] font-semibold tracking-wider select-none truncate sm:text-[9px]"
           style={{
@@ -422,7 +411,6 @@ export function AgentBuildWrapper({
           </span>
         </div>
 
-        {/* Bottom-Right Dimension Pill */}
         {dimensionText && (
           <div
             className="pointer-events-none absolute -bottom-4 right-2 flex items-center gap-1 rounded px-1.5 py-0.2 font-mono text-[8px] font-medium select-none whitespace-nowrap"
@@ -441,22 +429,16 @@ export function AgentBuildWrapper({
           </div>
         )}
 
-        {/* ============================================================== */}
-        {/* CURSOR 1: Lead Pull & Write Agent (Upright, Rapid Darting)     */}
-        {/* ============================================================== */}
         <motion.div
           variants={cursor1Variants}
           style={{ filter: "drop-shadow(var(--agent-shadow))" }}
           className="pointer-events-none absolute z-40 flex items-start select-none"
         >
-          {/* Click / Drag Action Ring at Cursor Tip */}
           <motion.span
             variants={ring1Variants}
             style={{ borderColor: primaryAgent.color }}
             className="pointer-events-none absolute top-0.5 left-0.5 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
           />
-
-          {/* Upright Precision Cursor Pointer (0deg rotation) */}
           <svg
             width="17"
             height="17"
@@ -473,8 +455,6 @@ export function AgentBuildWrapper({
               strokeLinejoin="round"
             />
           </svg>
-
-          {/* Agent Name & Action Pill */}
           <div
             className="ml-1 mt-2 flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[8.5px] font-semibold whitespace-nowrap"
             style={{
@@ -502,9 +482,6 @@ export function AgentBuildWrapper({
           </div>
         </motion.div>
 
-        {/* ============================================================== */}
-        {/* CURSOR 2: Box Pull & Edge Alignment Agent                      */}
-        {/* ============================================================== */}
         <motion.div
           variants={cursor2Variants}
           style={{ filter: "drop-shadow(var(--agent-shadow))" }}
@@ -515,7 +492,6 @@ export function AgentBuildWrapper({
             style={{ borderColor: secondaryAgent.color }}
             className="pointer-events-none absolute top-0.5 left-0.5 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
           />
-
           <svg
             width="16"
             height="16"
@@ -532,7 +508,6 @@ export function AgentBuildWrapper({
               strokeLinejoin="round"
             />
           </svg>
-
           <div
             className="ml-1 mt-2 flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[8px] font-semibold whitespace-nowrap"
             style={{
@@ -549,9 +524,6 @@ export function AgentBuildWrapper({
           </div>
         </motion.div>
 
-        {/* ============================================================== */}
-        {/* CURSOR 3: Text & Node Builder Agent (Darts Across Content)     */}
-        {/* ============================================================== */}
         {effectiveAgentCount >= 3 && (
           <motion.div
             variants={cursor3Variants}
@@ -563,7 +535,6 @@ export function AgentBuildWrapper({
               style={{ borderColor: tertiaryAgent.color }}
               className="pointer-events-none absolute top-0.5 left-0.5 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2"
             />
-
             <svg
               width="15"
               height="15"
@@ -580,7 +551,6 @@ export function AgentBuildWrapper({
                 strokeLinejoin="round"
               />
             </svg>
-
             <div
               className="ml-1 mt-1.5 flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[8px] font-semibold whitespace-nowrap"
               style={{
@@ -599,9 +569,6 @@ export function AgentBuildWrapper({
         )}
       </motion.div>
 
-      {/* ================================================================== */}
-      {/* Child Content: Physical Pull-In by Cursors (Runs strictly once)    */}
-      {/* ================================================================== */}
       <motion.div variants={contentVariants} className="relative z-10 w-full">
         {children}
       </motion.div>

@@ -66,7 +66,7 @@ export function validateContactInput(raw: Partial<ContactFormInput>): ContactVal
     errors.phone = "phoneRequired";
   }
 
-  if (description.length < 15) {
+  if (!description.trim()) {
     errors.description = "descriptionRequired";
   }
 

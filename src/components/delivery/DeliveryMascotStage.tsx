@@ -58,46 +58,46 @@ export function DeliveryMascotStage({
       <style>{`
         @keyframes origamiGlideDesktop {
           0% {
-            transform: translate3d(0vw, 0vh, 0) scale(0.72) rotate(-3deg);
+            transform: translate3d(0vw, 0vh, 0) scale(0.78) rotate(-2deg);
             opacity: 0;
           }
-          16% {
-            transform: translate3d(6vw, -3vh, 0) scale(1.02) rotate(-7deg);
+          15% {
+            transform: translate3d(8vw, -1.5vh, 0) scale(1.02) rotate(-4deg);
             opacity: 1;
           }
-          48% {
-            transform: translate3d(34vw, -16vh, 0) scale(1.06) rotate(-11deg);
+          45% {
+            transform: translate3d(38vw, -4vh, 0) scale(1.05) rotate(-7deg);
             opacity: 1;
           }
-          80% {
-            transform: translate3d(70vw, -32vh, 0) scale(1.0) rotate(-13deg);
+          75% {
+            transform: translate3d(75vw, -8vh, 0) scale(1.02) rotate(-9deg);
             opacity: 1;
           }
           100% {
-            transform: translate3d(108vw, -48vh, 0) scale(0.9) rotate(-15deg);
+            transform: translate3d(112vw, -12vh, 0) scale(0.96) rotate(-11deg);
             opacity: 0;
           }
         }
 
         @keyframes origamiGlideMobile {
           0% {
-            transform: translate3d(0vw, 0vh, 0) scale(0.72) rotate(-3deg);
+            transform: translate3d(0vw, 0vh, 0) scale(0.75) rotate(-2deg);
             opacity: 0;
           }
-          16% {
-            transform: translate3d(6vw, -4vh, 0) scale(1.02) rotate(-7deg);
+          15% {
+            transform: translate3d(8vw, -2vh, 0) scale(1.02) rotate(-4deg);
             opacity: 1;
           }
-          48% {
-            transform: translate3d(36vw, -17vh, 0) scale(1.06) rotate(-11deg);
+          45% {
+            transform: translate3d(40vw, -5vh, 0) scale(1.04) rotate(-7deg);
             opacity: 1;
           }
-          80% {
-            transform: translate3d(74vw, -33vh, 0) scale(1.0) rotate(-13deg);
+          75% {
+            transform: translate3d(78vw, -9vh, 0) scale(1.0) rotate(-9deg);
             opacity: 1;
           }
           100% {
-            transform: translate3d(112vw, -48vh, 0) scale(0.9) rotate(-15deg);
+            transform: translate3d(115vw, -13vh, 0) scale(0.94) rotate(-11deg);
             opacity: 0;
           }
         }

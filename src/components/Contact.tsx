@@ -11,6 +11,7 @@ import {
   DeliveryMascotStage,
 } from "./delivery/DeliveryMascotStage";
 import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
+import { BorderBeam } from "./ui/BorderBeam";
 
 export function Contact() {
   const { lang } = usePreferences();
@@ -43,12 +44,12 @@ export function Contact() {
     >
       {/* 
         3D Delivery Flight Layer:
-        Elevated at section-level with z-[100] so it flies completely IN FRONT of
-        the contact cards, contact form, and all other elements.
+        Elevated at section-level with z-[100] and overflow-visible so it flies completely IN FRONT of
+        the contact cards, contact form, and all other elements without being clipped.
       */}
-      <div className="pointer-events-none absolute inset-0 z-[100] overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 h-full relative">
-          <div className="absolute top-24 sm:top-28 lg:top-20 left-4 sm:left-6 lg:left-8 overflow-visible">
+      <div className="pointer-events-none absolute inset-0 z-[100] overflow-visible">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 h-full relative overflow-visible">
+          <div className="absolute top-28 sm:top-32 lg:top-28 left-4 sm:left-6 lg:left-8 overflow-visible">
             <DeliveryMascotStage
               flightStatus={flightStatus}
               variant="desktop"
@@ -73,7 +74,7 @@ export function Contact() {
               <div>
                 <h2
                   id="contact-heading"
-                  className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
+                  className="text-[20px] leading-tight whitespace-nowrap font-light tracking-tight text-[var(--heading)] sm:text-4xl"
                 >
                   {lang === "bn" ? "যোগাযোগ করুন" : "Contact With Me"}
                 </h2>
@@ -106,14 +107,15 @@ export function Contact() {
                       ? "জিমেইলে সরাসরি মেসেজ লিখুন"
                       : "Open Gmail to compose message directly"
                   }
-                  className="group flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4 transition-all duration-300 hover:border-[var(--accent)] hover:shadow-[0_4px_20px_rgba(139,140,247,0.12)] cursor-pointer"
+                  className="relative group overflow-hidden flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4 cursor-pointer"
                 >
+                  <BorderBeam />
                   <div className="flex items-center gap-3.5 min-w-0">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/10 text-[var(--accent)] group-hover:scale-105 transition-transform duration-300">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
                       <Mail className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[var(--heading)] group-hover:text-[var(--accent)] transition-colors truncate">
+                      <p className="text-sm font-medium text-[var(--heading)] truncate">
                         {PERSONAL_INFO.contact.email}
                       </p>
                       <p className="text-xs text-[var(--muted)] truncate">
@@ -149,7 +151,7 @@ export function Contact() {
                     </button>
 
                     <ExternalLink
-                      className="h-4 w-4 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors"
+                      className="h-4 w-4 text-[var(--muted)]"
                       aria-hidden="true"
                     />
                   </div>
@@ -170,8 +172,9 @@ export function Contact() {
                   href={PERSONAL_INFO.contact.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--accent)]"
+                  className="relative group overflow-hidden flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4"
                 >
+                  <BorderBeam />
                   <div className="flex items-center gap-3.5">
                     <WhatsAppIcon size={20} className="shrink-0 text-[var(--accent)]" />
                     <div>
@@ -204,8 +207,9 @@ export function Contact() {
                   href={PERSONAL_INFO.contact.linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--accent)]"
+                  className="relative group overflow-hidden flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4"
                 >
+                  <BorderBeam />
                   <div className="flex items-center gap-3.5">
                     <LinkedInIcon size={20} className="shrink-0 text-[var(--accent)]" />
                     <div>
@@ -239,8 +243,9 @@ export function Contact() {
                     href={PERSONAL_INFO.contact.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors hover:border-[var(--accent)]"
+                    className="relative group overflow-hidden flex items-center justify-between rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4"
                   >
+                    <BorderBeam />
                     <div className="flex items-center gap-3.5">
                       <GitHubIcon size={20} className="shrink-0 text-[var(--heading)]" />
                       <div>

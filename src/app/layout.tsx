@@ -39,11 +39,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Md. Fahim Hossain | Full-Stack Developer & AI Automation Enthusiast",
+    default: "Md. Fahim Hossain | Full-Stack Developer | UI/UX Designer | AI Automation Learner",
     template: "%s | Md. Fahim Hossain",
   },
   description:
-    "Personal portfolio of Md. Fahim Hossain — Full-Stack Developer, AI Automation Enthusiast, and Computer Science & Engineering (CSE) student at UITS. Explore projects including Focentia, technical skills, and contact details.",
+    "Personal portfolio of Md. Fahim Hossain — Full-Stack Developer, UI/UX Designer, and Computer Science & Engineering (CSE) student at UITS. Explore projects including Focentia, web apps, and contact details.",
   keywords: [
     "Md. Fahim Hossain",
     "Fahim Hossain",

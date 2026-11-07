@@ -5,6 +5,7 @@ import { usePreferences } from "@/context/PreferencesContext";
 import { PERSONAL_INFO } from "@/data/portfolio";
 import { GraduationCap, Layers, Cpu } from "lucide-react";
 import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
+import { BorderBeam } from "./ui/BorderBeam";
 
 export function About() {
   const { lang, t } = usePreferences();
@@ -12,30 +13,33 @@ export function About() {
   const highlights = [
     {
       icon: GraduationCap,
-      label: lang === "bn" ? "একাডেমিক প্রোফাইল" : "Academic Profile",
-      value: t(PERSONAL_INFO.education.degree),
-      sub: t(PERSONAL_INFO.education.institution),
+      label: lang === "bn" ? "একাডেমিক প্রোফাইল" : "ACADEMIC PROFILE",
+      value:
+        lang === "bn"
+          ? "বি.এসসি. ইন কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং"
+          : "B.Sc. in Computer Science & Engineering",
+      sub: lang === "bn" ? "ইউআইটিএস, তৃতীয় সেমিস্টার" : "UITS, Third Semester",
     },
     {
       icon: Layers,
-      label: lang === "bn" ? "কোর টেকনোলজি" : "Core Tech Stack",
+      label: lang === "bn" ? "কোর টেকনোলজি" : "CORE TECH STACK",
       value: "React, Next.js, TypeScript, MERN & Supabase",
       sub:
         lang === "bn"
-          ? "রেসপনসিভ, দ্রুত ও আধুনিক ওয়েব অ্যাপ্লিকেশন ডেভেলপমেন্ট"
-          : "Building fast, responsive, and scalable web applications",
+          ? "ওয়েব ও মোবাইলের জন্য দ্রুত ও পরিচ্ছন্ন অ্যাপ"
+          : "Fast, clean apps for web and mobile",
     },
     {
       icon: Cpu,
-      label: lang === "bn" ? "ফুল-স্ট্যাক ও এআই" : "Full-Stack & AI Automation",
+      label: lang === "bn" ? "ডিজাইন ও এআই অটোমেশন" : "DESIGN & AI AUTOMATION",
       value:
         lang === "bn"
-          ? "আধুনিক ওয়েব ও স্মার্ট অটোমেশন"
-          : "Modern Web Engineering & Smart Workflows",
+          ? "ইউআই/ইউএক্স ডিজাইন ও স্মার্ট ওয়ার্কফ্লো"
+          : "UI/UX Design & Smart Workflows",
       sub:
         lang === "bn"
-          ? "বাস্তব জীবনের জটিল কাজের সহজ ডিজিটাল সমাধান"
-          : "Solving real-world problems with clean code and AI tools",
+          ? "অ্যাপ ব্যবহার সহজ করা এবং কাজকে আরও সহজ করা"
+          : "Making apps easy to use, and work easier to do",
     },
   ];
 
@@ -58,7 +62,7 @@ export function About() {
           <div>
             <h2
               id="about-heading"
-              className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
+              className="text-[20px] leading-tight whitespace-nowrap font-light tracking-tight text-[var(--heading)] sm:text-4xl"
             >
               {lang === "bn" ? "আমার সম্পর্কে" : "About Me"}
             </h2>
@@ -79,20 +83,20 @@ export function About() {
           <div className="w-full space-y-3.5 text-base leading-relaxed text-[var(--text)]">
             <p className="text-lg font-normal text-[var(--heading)] sm:text-xl leading-snug">
               {lang === "bn"
-                ? "আমি মোঃ ফাহিম হোসেন — ইউনিভার্সিটি অব ইনফরমেশন টেকনোলজি অ্যান্ড সায়েন্স (UITS)-এর কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং (CSE) বিভাগের একজন শিক্ষার্থী এবং ফুল-স্ট্যাক ওয়েব ডেভেলপার।"
-                : "I am Md. Fahim Hossain, a Full-Stack Web Developer and Computer Science & Engineering (CSE) student at the University of Information Technology and Sciences (UITS)."}
+                ? "আমি মোঃ ফাহিম হোসেন — একজন ফুল-স্ট্যাক ডেভেলপার, ইউআই/ইউএক্স ডিজাইনার এবং ইউনিভার্সিটি অব ইনফরমেশন টেকনোলজি অ্যান্ড সায়েন্সেস (UITS)-এর সিএসই শিক্ষার্থী।"
+                : "I'm Md. Fahim Hossain, a full-stack developer, UI/UX designer, and CSE student at the University of Information Technology and Sciences (UITS)."}
             </p>
 
             <p>
               {lang === "bn"
-                ? "আমি দ্রুত, আধুনিক এবং ব্যবহারবান্ধব ওয়েব অ্যাপ্লিকেশন তৈরি করতে ভালোবাসি। আমার প্রতিদিনের কাজের মূল প্রযুক্তিগুলোর মধ্যে রয়েছে JavaScript, TypeScript, React, Next.js, Node.js, MongoDB, Tailwind CSS এবং Supabase। প্রতিটি প্রজেক্টেই আমি পরিচ্ছন্ন কোড এবং দারুণ ইউজার এক্সপেরিয়েন্স নিশ্চিত করার চেষ্টা করি।"
-                : "I enjoy building fast, clean, and easy-to-use websites and web applications. Every day, I work with modern tools like JavaScript, TypeScript, React, Next.js, Node.js, MongoDB, Tailwind CSS, and Supabase to turn practical ideas into reliable digital products."}
+                ? "আমি এমন অ্যাপ তৈরি করতে পছন্দ করি যা সহজে ব্যবহার করা যায় এবং সাধারণ মানুষের উপযোগী। আমি JavaScript, TypeScript, React, Next.js, Node.js, MongoDB, Tailwind CSS এবং Supabase নিয়ে কাজ করি এবং একটি অ্যাপ দেখতে কেমন এবং কীভাবে কাজ করে—দুটো বিষয়কেই সমান গুরুত্ব দিই।"
+                : "I like building apps that feel simple to use and are ready for real people. I work with JavaScript, TypeScript, React, Next.js, Node.js, MongoDB, Tailwind CSS, and Supabase, and I care about both how an app looks and how it works."}
             </p>
 
             <p>
               {lang === "bn"
-                ? "ওয়েব ডেভেলপমেন্টের পাশাপাশি আমি এআই অটোমেশন নিয়ে কাজ করতে অত্যন্ত আগ্রহী। স্মার্ট টুলস এবং অটোমেটেড ওয়ার্কফ্লো ব্যবহার করে মানুষের সময় বাঁচানো ও বাস্তব সমস্যার সহজ সমাধান তৈরি করাই আমার লক্ষ্য।"
-                : "Alongside full-stack development, I am deeply interested in AI automation—using smart workflows and modern tools to save time, simplify everyday tasks, and solve real-world problems."}
+                ? "আমি দ্রুত কাজ করার জন্য এআই টুলস ব্যবহার করি এবং দৈনন্দিন কাজের সময় বাঁচাতে এআই অটোমেশন শিখছি। এর সাথে সাথে আমি এসইও শিখছি যেন আমার তৈরি কাজগুলো আরও বেশি মানুষের কাছে পৌঁছাতে পারে।"
+                : "I also use AI tools to build faster, and I'm learning AI automation to save time on everyday tasks. Along the way, I'm learning SEO so the things I build can be found by more people."}
             </p>
           </div>
         </AgentBuildWrapper>
@@ -119,7 +123,8 @@ export function About() {
                 agentCount={2}
                 className="w-full"
               >
-                <div className="flex items-center gap-4 rounded-[18px] border border-[var(--border)] bg-[var(--surface)]/70 px-5 py-3.5 shadow-sm backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent)]/60 hover:translate-x-1">
+                <div className="relative group overflow-hidden flex items-center gap-4 rounded-[18px] border border-[var(--border)] bg-[var(--surface)]/70 px-5 py-3.5 shadow-sm backdrop-blur-xl">
+                  <BorderBeam />
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--bg)]/75 text-[var(--accent)]">
                     <IconComponent
                       className="h-4 w-4"

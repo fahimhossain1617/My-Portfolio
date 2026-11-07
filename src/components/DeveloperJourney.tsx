@@ -5,6 +5,7 @@ import { CheckCircle2, Calendar, MapPin } from "lucide-react";
 import { usePreferences } from "@/context/PreferencesContext";
 import { JOURNEY_STAGES } from "@/data/portfolio";
 import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
+import { BorderBeam } from "./ui/BorderBeam";
 
 export function DeveloperJourney() {
   const { lang, t } = usePreferences();
@@ -28,15 +29,15 @@ export function DeveloperJourney() {
           <div>
             <h2
               id="journey-heading"
-              className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
+              className="text-[20px] leading-tight whitespace-nowrap font-light tracking-tight text-[var(--heading)] sm:text-4xl"
             >
               {lang === "bn" ? "লার্নিং ও ক্যারিয়ার জার্নি" : "Developer Journey"}
             </h2>
             <div className="mt-2 h-1 w-12 rounded-full bg-[var(--accent)]" />
             <p className="mt-3 text-sm text-[var(--muted)] max-w-xl">
               {lang === "bn"
-                ? "কম্পিউটার সায়েন্স শিক্ষা থেকে শুরু করে বাস্তব প্রজেক্ট তৈরির ধারাবাহিক অভিজ্ঞতা।"
-                : "My academic path, practical engineering milestones, and continuous learning progression."}
+                ? "কীভাবে শুরু করেছি, কী কী বানিয়েছি এবং আমার ভবিষ্যৎ লক্ষ্য।"
+                : "How I started, what I've built, and where I want to go."}
             </p>
           </div>
         </AgentBuildWrapper>
@@ -82,7 +83,8 @@ export function DeveloperJourney() {
                     agentCount={2}
                     className="w-full"
                   >
-                    <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)]/80 p-5 sm:p-6 shadow-sm backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent)]/60">
+                    <div className="relative group overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--surface)]/80 p-5 sm:p-6 shadow-sm backdrop-blur-xl">
+                      <BorderBeam />
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium tracking-wide text-[var(--accent)]">
                           <Calendar className="h-3.5 w-3.5" />

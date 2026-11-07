@@ -69,9 +69,9 @@ export function FahimAvatar({
         <clipPath id="fahimNearBodyClip">
           <path
             d="
-              M 180 0
-              L 879 0
-              L 879 492
+              M 0 -120
+              L 1150 -120
+              L 1150 492
               L 510 492
               L 460 510
               C 510 526, 565 555, 605 595
@@ -81,7 +81,7 @@ export function FahimAvatar({
               L 815 840
               L 825 865
               L 730 958
-              L 180 958
+              L 0 958
               Z
             "
           />

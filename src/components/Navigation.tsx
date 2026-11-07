@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Briefcase,
   Code2,
@@ -34,22 +34,41 @@ const DESKTOP_NAV_ITEMS = NAV_ITEMS.filter((item) => item.id !== "contact");
 export function Navigation() {
   const { t } = usePreferences();
   const [activeSection, setActiveSection] = useState<string>("home");
+  const isProgrammaticScrollRef = useRef(false);
+  const scrollUnlockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let rafId: number | null = null;
+
+    const updateActiveSection = () => {
+      rafId = null;
+      if (isProgrammaticScrollRef.current) return;
+
       const scrollPosition = window.scrollY + 180;
       for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
         const sectionEl = document.getElementById(NAV_ITEMS[i].id);
         if (sectionEl && sectionEl.offsetTop <= scrollPosition) {
-          setActiveSection(NAV_ITEMS[i].id);
+          const nextId = NAV_ITEMS[i].id;
+          setActiveSection((prev) => (prev === nextId ? prev : nextId));
           break;
         }
       }
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (isProgrammaticScrollRef.current) return;
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(updateActiveSection);
+      }
+    };
+
+    updateActiveSection();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      if (scrollUnlockTimerRef.current) clearTimeout(scrollUnlockTimerRef.current);
+    };
   }, []);
 
   const scrollToSection = (
@@ -59,6 +78,13 @@ export function Navigation() {
     e.preventDefault();
     const target = document.getElementById(id);
     if (target) {
+      // Lock scroll spy during smooth scroll so active pill jumps directly to target without intermediate lag
+      isProgrammaticScrollRef.current = true;
+      if (scrollUnlockTimerRef.current) {
+        clearTimeout(scrollUnlockTimerRef.current);
+      }
+      setActiveSection(id);
+
       const headerOffset = 80;
       const elementPosition = target.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
@@ -67,8 +93,13 @@ export function Navigation() {
         top: Math.max(0, offsetPosition),
         behavior: "smooth",
       });
-      setActiveSection(id);
       window.history.replaceState(null, "", `#${id}`);
+
+      scrollUnlockTimerRef.current = setTimeout(() => {
+        isProgrammaticScrollRef.current = false;
+      }, 850);
+    } else {
+      window.location.href = id === "home" ? "/" : `/#${id}`;
     }
   };
 

@@ -26,28 +26,31 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const { t } = usePreferences();
 
-  return (
-    <article className="group relative flex flex-col justify-between overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--surface)]/90 backdrop-blur-md p-3.5 sm:p-5 transition-all duration-300 hover:border-[var(--accent)] hover:shadow-[0_10px_30px_rgba(139,140,247,0.12)]">
-      {/* Background ambient lighting */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-20 -right-20 h-40 w-40 rounded-full bg-[var(--accent)]/10 blur-3xl transition-opacity group-hover:opacity-100"
-      />
+  const isRadiation = project.id === "radiation-coaching";
 
+  return (
+    <article
+      onClick={onToggleExpand}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--surface)]/90 backdrop-blur-md p-3.5 sm:p-5 transition-colors duration-200 hover:border-[var(--accent)] cursor-pointer select-none"
+    >
       <div>
-        {/* Top Header Bar: Category Tag & Action Buttons strictly on the exact same horizontal line */}
+        {/* Top Header Bar: Category Tag & Action Buttons */}
         <div className="mb-2 flex items-center justify-between gap-2">
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg)]/60 px-2.5 py-1 font-mono text-[10px] sm:text-[11px] font-medium tracking-wider text-[var(--accent)] uppercase backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
             {project.category}
           </span>
 
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <div
+            className="flex shrink-0 items-center gap-1.5 sm:gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
             {project.liveUrl && (
               <a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1 rounded-[9px] border border-[var(--border)] bg-[var(--bg)]/60 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-[var(--heading)] transition-all hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--on-accent)] cursor-pointer"
               >
                 <span>{t(UI_TEXT.projects.liveDemo)}</span>
@@ -60,6 +63,7 @@ export function ProjectCard({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="inline-flex items-center gap-1 rounded-[9px] border border-[var(--border)] bg-[var(--bg)]/60 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-[var(--heading)] transition-all hover:border-[var(--accent)] hover:text-[var(--accent)] cursor-pointer"
               >
                 <GitHubIcon size={12} />
@@ -69,57 +73,55 @@ export function ProjectCard({
           </div>
         </div>
 
-        {/* Compact Device Showcase (Pulled higher with minimal top margin) */}
-        <div
-          onClick={onToggleExpand}
-          className="cursor-pointer transition-transform duration-300 group-hover:scale-[1.01]"
-          title={t(UI_TEXT.projects.viewCaseStudy)}
-        >
-          <div className="relative mx-auto w-full pt-0.5 pb-1.5">
-            {/* Compact Laptop Display Lid */}
-            <div className="relative mx-auto w-full max-w-[250px] xs:max-w-[300px] sm:max-w-[360px] rounded-t-[12px] sm:rounded-t-[14px] border-t-2 border-x-2 border-[#333344] bg-[#0c0c14] p-1.5 sm:p-2 pb-0 shadow-xl ring-1 ring-white/10">
-              {/* Laptop Camera & Sensor Bar */}
-              <div className="absolute top-0.5 left-1/2 -translate-x-1/2 flex items-center gap-1">
-                <div className="h-1 w-1 rounded-full bg-[#1e1e2d] ring-1 ring-white/20" />
-                <div className="h-1 w-1 rounded-full bg-emerald-500/80 animate-pulse" />
-              </div>
-
-              {/* Screen Inner Bezel & Live Screenshot */}
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-[6px] sm:rounded-t-[8px] bg-black">
-                {project.thumbnailSrc ? (
-                  <>
-                    <Image
-                      src={project.thumbnailSrc}
-                      alt={t(project.title)}
-                      fill
-                      sizes="(max-width: 640px) 300px, 360px"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10 opacity-55 group-hover:opacity-20 transition-opacity"
-                    />
-                  </>
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center bg-[#0d0e1a]">
-                    <ImageIcon className="h-6 w-6 text-[var(--accent)] mb-1.5" />
-                    <p className="text-xs text-[var(--muted)]">
-                      {t(project.title)}
-                    </p>
-                  </div>
-                )}
-              </div>
+        {/* Compact Device Showcase (No zoom scale, steady and uncropped) */}
+        <div className="relative mx-auto w-full pt-0.5 pb-1.5">
+          {/* Compact Laptop Display Lid */}
+          <div className="relative mx-auto w-full max-w-[250px] xs:max-w-[300px] sm:max-w-[360px] rounded-t-[12px] sm:rounded-t-[14px] border-t-2 border-x-2 border-[#333344] bg-[#0c0c14] p-1.5 sm:p-2 pb-0 shadow-lg ring-1 ring-white/10">
+            {/* Laptop Camera & Sensor Bar */}
+            <div className="absolute top-0.5 left-1/2 -translate-x-1/2 flex items-center gap-1">
+              <div className="h-1 w-1 rounded-full bg-[#1e1e2d] ring-1 ring-white/20" />
+              <div className="h-1 w-1 rounded-full bg-emerald-500/80 animate-pulse" />
             </div>
 
-            {/* Laptop Base / Keyboard Deck */}
-            <div className="relative mx-auto -mt-[1px] h-2.5 sm:h-3 w-full max-w-[268px] xs:max-w-[320px] sm:max-w-[385px] rounded-b-[8px] sm:rounded-b-[11px] border-b border-x border-[#2c2d3d] bg-gradient-to-b from-[#222230] via-[#171722] to-[#0f0f18] shadow-[0_8px_18px_rgba(0,0,0,0.45)]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-10 sm:w-12 rounded-b-[3px] bg-[#111119] border-x border-b border-white/10" />
+            {/* Screen Inner Bezel & Live Screenshot */}
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-[6px] sm:rounded-t-[8px] bg-[#0a0d18]">
+              {project.thumbnailSrc ? (
+                <>
+                  <Image
+                    src={project.thumbnailSrc}
+                    alt={t(project.title)}
+                    fill
+                    sizes="(max-width: 640px) 300px, 360px"
+                    className={`transition-none ${
+                      isRadiation
+                        ? "object-contain bg-[#080d1a]"
+                        : "object-cover object-top"
+                    }`}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-40"
+                  />
+                </>
+              ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center bg-[#0d0e1a]">
+                  <ImageIcon className="h-6 w-6 text-[var(--accent)] mb-1.5" />
+                  <p className="text-xs text-[var(--muted)]">
+                    {t(project.title)}
+                  </p>
+                </div>
+              )}
             </div>
+          </div>
+
+          {/* Laptop Base / Keyboard Deck */}
+          <div className="relative mx-auto -mt-[1px] h-2.5 sm:h-3 w-full max-w-[268px] xs:max-w-[320px] sm:max-w-[385px] rounded-b-[8px] sm:rounded-b-[11px] border-b border-x border-[#2c2d3d] bg-gradient-to-b from-[#222230] via-[#171722] to-[#0f0f18] shadow-md">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-10 sm:w-12 rounded-b-[3px] bg-[#111119] border-x border-b border-white/10" />
           </div>
         </div>
 
-        {/* Project Meta Information (Compact Title, Description, Tech Badges) */}
-        <div className="mt-1.5 flex flex-col justify-between">
+        {/* Project Meta Information */}
+        <div className="mt-2 flex flex-col justify-between">
           <div>
             <h3 className="text-lg font-medium tracking-tight text-[var(--heading)] sm:text-xl group-hover:text-[var(--accent)] transition-colors">
               {t(project.title)}
@@ -146,18 +148,13 @@ export function ProjectCard({
             )}
           </div>
 
-          {/* Open Full Case Study Interface Trigger */}
+          {/* Open Full Case Study Trigger */}
           <div className="mt-3 flex items-center justify-between border-t border-[var(--border)]/60 pt-2.5">
-            <button
-              type="button"
-              onClick={onToggleExpand}
-              aria-expanded={isExpanded}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)] cursor-pointer"
-            >
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]">
               <Layers className="h-3.5 w-3.5" />
               <span>{t(UI_TEXT.projects.viewCaseStudy)}</span>
               <ArrowUpRight className="h-3.5 w-3.5" />
-            </button>
+            </span>
           </div>
         </div>
       </div>

@@ -43,7 +43,7 @@ export function Skills() {
           <div>
             <h2
               id="skills-heading"
-              className="text-3xl font-light tracking-tight text-[var(--heading)] sm:text-4xl"
+              className="text-[20px] leading-tight whitespace-nowrap font-light tracking-tight text-[var(--heading)] sm:text-4xl"
             >
               {lang === "bn" ? "দক্ষতা ও প্রযুক্তি" : "Skills & Technologies"}
             </h2>

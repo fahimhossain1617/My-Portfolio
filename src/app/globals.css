@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root,
 [data-theme="dark"] {
   --bg: #000000;
@@ -30,6 +32,10 @@
   --agent-pill-text: #EEF0FF;
   --agent-handle-bg: #0B0B12;
   --agent-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+  /* Smooth Medium Border Beam Tokens (Dark Mode) */
+  --beam-primary: #8B8CF7;
+  --beam-secondary: #38BDF8;
+  --beam-track: rgba(139, 140, 247, 0.16);
   color-scheme: dark;
 }
 
@@ -62,6 +68,10 @@
   --agent-pill-text: #0B0B1A;
   --agent-handle-bg: #FFFFFF;
   --agent-shadow: 0 4px 14px rgba(91, 93, 224, 0.18);
+  /* Smooth Medium Border Beam Tokens (Light Mode) */
+  --beam-primary: #5B5DE0;
+  --beam-secondary: #8B5CF6;
+  --beam-track: rgba(91, 93, 224, 0.16);
   color-scheme: light;
 }
 
@@ -268,6 +278,48 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-pulse-gleam {
   animation: pulseShimmerGleam 3s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Smooth Medium Border Beam (Theme-Matched for Dark & Light Modes)
+   ========================================================================== */
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes borderBeamSpin {
+  0% {
+    --beam-angle: 0deg;
+  }
+  100% {
+    --beam-angle: 360deg;
+  }
+}
+
+.border-beam-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.75px;
+  pointer-events: none;
+  z-index: 20;
+  background: conic-gradient(
+    from var(--beam-angle) at 50% 50%,
+    var(--beam-track) 0%,
+    var(--beam-track) 58%,
+    var(--beam-primary) 78%,
+    var(--beam-secondary) 92%,
+    var(--beam-primary) 98%,
+    var(--beam-track) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: borderBeamSpin 3.2s linear infinite;
+  transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Respect Reduced Motion Preferences */

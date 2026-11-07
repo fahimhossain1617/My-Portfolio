@@ -8,7 +8,11 @@ import { PERSONAL_INFO } from "@/data/portfolio";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "./BrandIcons";
 import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
 
-export function Footer() {
+export function Footer({
+  disableAgentAnimation = false,
+}: {
+  disableAgentAnimation?: boolean;
+}) {
   const { lang, t, theme } = usePreferences();
   const currentYear = new Date().getFullYear();
   const [isCtaHovered, setIsCtaHovered] = useState(false);
@@ -17,7 +21,6 @@ export function Footer() {
   const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setIsCtaHovered(true);
-    // Allow the delightful liquid wave surge to visibly animate before smooth scroll
     setTimeout(() => {
       const el = document.getElementById("contact");
       if (el) {
@@ -25,6 +28,8 @@ export function Footer() {
         const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
         window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
         window.history.replaceState(null, "", "#contact");
+      } else {
+        window.location.href = "/#contact";
       }
       setTimeout(() => setIsCtaHovered(false), 900);
     }, 240);
@@ -32,41 +37,46 @@ export function Footer() {
 
   return (
     <footer className="relative z-[1] overflow-hidden bg-[var(--bg)] pt-20 pb-28 sm:pb-20 md:pb-16">
-      {/* 1. Smoky Top Transition (Seamless smoky fade instead of sharp horizontal border) */}
+      {/* 1. Smoky Top Transition */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[var(--bg)] via-[var(--bg)]/90 to-transparent z-10"
+        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[var(--bg)] via-[var(--bg)]/90 to-transparent z-10"
       />
 
-      {/* 2. Ambient Panoramic Hands & Core Visual (Subtle, toned-down highlights in light mode) */}
+      {/* 2. Panoramic Hands & Core Visual (Softly dissolved and smoky blended in both Light & Dark modes) */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-16 sm:top-20 h-[320px] sm:h-[380px] overflow-hidden select-none"
+        className="pointer-events-none absolute inset-x-0 top-12 sm:top-16 h-[340px] sm:h-[400px] overflow-hidden select-none"
       >
         <img
           src="/images/hands-together-wide.jpg"
           alt=""
           className={`h-full w-full object-cover object-center transition-all duration-700 ${
             isLight
-              ? "opacity-[0.035] contrast-[0.8] brightness-[0.5] invert sepia-0 saturate-0"
-              : "opacity-18 contrast-100 brightness-100 invert-0 sepia saturate-[260%] hue-rotate-[205deg]"
+              ? "opacity-30 contrast-125 brightness-95 saturate-[160%] hue-rotate-[205deg] mix-blend-multiply"
+              : "opacity-16 contrast-100 brightness-100 invert-0 sepia saturate-[240%] hue-rotate-[205deg]"
           }`}
           style={{
             maskImage:
-              "radial-gradient(ellipse 70% 50% at 50% 55%, black 10%, transparent 75%)",
+              "radial-gradient(ellipse 65% 42% at 50% 46%, black 0%, rgba(0, 0, 0, 0.8) 25%, rgba(0, 0, 0, 0.35) 50%, rgba(0, 0, 0, 0.06) 68%, transparent 75%)",
             WebkitMaskImage:
-              "radial-gradient(ellipse 70% 50% at 50% 55%, black 10%, transparent 75%)",
+              "radial-gradient(ellipse 65% 42% at 50% 46%, black 0%, rgba(0, 0, 0, 0.8) 25%, rgba(0, 0, 0, 0.35) 50%, rgba(0, 0, 0, 0.06) 68%, transparent 75%)",
           }}
         />
-        {/* Soft Radial Ambient Glow in Theme Accent Color */}
+        {/* Soft Radial Ambient Glow */}
         <div
           className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
-            isLight ? "opacity-[0.05]" : "opacity-16"
+            isLight ? "opacity-12" : "opacity-15"
           }`}
           style={{
             background:
-              "radial-gradient(circle at 50% 55%, var(--accent) 0%, transparent 65%)",
+              "radial-gradient(circle at 50% 46%, var(--accent) 0%, transparent 60%)",
           }}
+        />
+        {/* Smoky Bottom Dissolve - completely dissolves any edge into background */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/85 to-transparent z-10"
         />
       </div>
 
@@ -79,24 +89,23 @@ export function Footer() {
           badgeText="Footer • Collaboration"
           dimensionText="880 × 160"
           agentCount={2}
+          disabled={disableAgentAnimation}
           className="w-full mb-12 sm:mb-14"
         >
           <div className="flex flex-col items-center justify-center text-center">
-            {/* Heading: Pure text, Centered, No box shape, No icon in front */}
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light tracking-tight text-[var(--heading)]">
               {lang === "bn"
-                ? "একত্রে কাজ করি, নতুন প্রজেক্ট গড়ি"
-                : "Let's Build Products Together"}
+                ? "একত্রে কাজ করি, নতুন কিছু গড়ি"
+                : "Let's Build Something Together"}
             </h2>
 
-            {/* High-Contrast, Crystal-Clear Subtitle using official UI theme token */}
             <p className="mt-4 max-w-xl text-xs sm:text-sm leading-relaxed text-[var(--text)] font-normal sm:font-medium relative z-20">
               {lang === "bn"
-                ? "নতুন কোনো প্রজেক্টের আইডিয়া বাস্তবায়ন করতে চান, টিমে একজন ডেডিকেটেড ফুল-স্ট্যাক ডেভেলপার প্রয়োজন, নাকি এআই অটোমেশন নিয়ে কাজ করতে আগ্রহী? চলুন আলোচনা করি এবং একসাথে বাস্তবমুখী কিছু তৈরি করি।"
-                : "Have an ambitious project in mind, need a dedicated full-stack engineer on your team, or exploring AI-driven automation? I'm always open to discussing new opportunities and building impactful products together."}
+                ? "আপনার কি কোনো আইডিয়া, প্রজেক্ট বা টিমে একজন ফুল-স্ট্যাক ডেভেলপার ও ডিজাইনার প্রয়োজন? আমি আপনার সাথে আলোচনা করতে আগ্রহী। মেসেজ পাঠান, চলুন কথা বলি।"
+                : "Have an idea, a project, or a team that needs a full-stack developer and designer? I'd love to hear about it. Send me a message and let's talk."}
             </p>
 
-            {/* Smooth Liquid Water Wave Fill Button (Undulating Waves that visibly rise on hover or touch) */}
+            {/* Smooth Liquid Water Wave Fill Button */}
             <div className="mt-8 flex items-center justify-center">
               <a
                 href="#contact"
@@ -111,7 +120,6 @@ export function Footer() {
                 onPointerDown={() => setIsCtaHovered(true)}
                 className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border border-[var(--border)] bg-[var(--surface)] px-10 sm:px-12 py-3.5 sm:py-4 shadow-sm backdrop-blur-xl transition-all duration-300 hover:border-[var(--accent)] hover:shadow-[0_0_28px_rgba(139,140,247,0.22)] active:border-[var(--accent)] cursor-pointer select-none active:scale-[0.98]"
               >
-                {/* Liquid Water Container rising smoothly on hover or mobile touch */}
                 <motion.div
                   initial={false}
                   animate={{
@@ -123,7 +131,6 @@ export function Footer() {
                   }}
                   className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-full"
                 >
-                  {/* Secondary Water Wave (Continuous horizontal liquid wave motion) */}
                   <motion.div
                     animate={{
                       x: [0, -300],
@@ -152,7 +159,6 @@ export function Footer() {
                     </svg>
                   </motion.div>
 
-                  {/* Primary Water Wave (Continuous undulating liquid crest) */}
                   <motion.div
                     animate={{
                       x: [-300, 0],
@@ -181,11 +187,9 @@ export function Footer() {
                     </svg>
                   </motion.div>
 
-                  {/* Solid Water Body */}
                   <div className="absolute inset-0 bg-[var(--accent)]" />
                 </motion.div>
 
-                {/* Button Text & Arrow Layer */}
                 <span
                   className={`relative z-10 text-sm font-medium tracking-wide transition-colors duration-300 ${
                     isCtaHovered ? "text-[var(--on-accent)]" : "text-[var(--heading)]"
@@ -206,7 +210,7 @@ export function Footer() {
           </div>
         </AgentBuildWrapper>
 
-        {/* 3. Social Channels: Centered in the middle (No dividing line above) */}
+        {/* 3. Social Channels: Centered */}
         <AgentBuildWrapper
           agentName="Channel_Bar"
           color="#38BDF8"
@@ -214,6 +218,7 @@ export function Footer() {
           badgeText="Footer • Channels"
           dimensionText="100% × 45"
           agentCount={2}
+          disabled={disableAgentAnimation}
           className="w-full mb-10"
         >
           <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3.5 text-xs sm:text-sm text-center">
@@ -274,7 +279,7 @@ export function Footer() {
           </ul>
         </AgentBuildWrapper>
 
-        {/* 4. "Available for projects": Positioned right above the copyright line */}
+        {/* 4. "Available for projects" */}
         <div className="flex items-center justify-center mb-5">
           <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[var(--text)]">
             <span className="relative flex h-2 w-2">
@@ -287,7 +292,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* 5. Copyright Bar: Clean, Centered, No horizontal dividing line */}
+        {/* 5. Copyright Bar */}
         <AgentBuildWrapper
           agentName="System_Engine"
           color="#10B981"
@@ -296,6 +301,7 @@ export function Footer() {
           badgeText="Footer • Copyright"
           dimensionText="100% × 30"
           agentCount={2}
+          disabled={disableAgentAnimation}
           className="w-full"
         >
           <div className="flex items-center justify-center text-center text-xs text-[var(--muted)]">
