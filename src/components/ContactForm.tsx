@@ -10,7 +10,10 @@ import {
   validateContactInput,
 } from "@/lib/validation";
 import { WhatsAppIcon } from "./BrandIcons";
-import { DeliveryFlightStatus } from "./delivery/DeliveryMascotStage";
+import {
+  DeliveryFlightStatus,
+  DeliveryMascotStage,
+} from "./delivery/DeliveryMascotStage";
 import { SuccessCheckmark } from "./delivery/SuccessCheckmark";
 
 type FieldErrorKey =
@@ -170,12 +173,18 @@ export function ContactForm({
   const fallbackWhatsappUrl = buildWhatsAppInquiryUrl(values);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      aria-label="Direct message contact form"
-      className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
-    >
+    <div className="relative overflow-visible">
+      {/* 3D Delivery Flight Layer: Takes off directly from this contact message box and glides diagonally */}
+      <div className="pointer-events-none absolute -bottom-4 left-0 sm:-bottom-6 sm:left-4 z-[100] overflow-visible">
+        <DeliveryMascotStage flightStatus={flightStatus} />
+      </div>
+
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        aria-label="Direct message contact form"
+        className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+      >
       {/* Honeypot field for anti-spam bots */}
       <div className="hidden" aria-hidden="true">
         <label htmlFor="website-trap">Leave this blank</label>
@@ -439,5 +448,6 @@ export function ContactForm({
         </p>
       </div>
     </form>
-  );
+  </div>
+);
 }

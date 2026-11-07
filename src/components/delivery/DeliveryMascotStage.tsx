@@ -58,52 +58,52 @@ export function DeliveryMascotStage({
       <style>{`
         @keyframes origamiGlideDesktop {
           0% {
-            transform: translate3d(0vw, 0vh, 0) scale(0.78) rotate(-2deg);
+            transform: translate3d(0, 0, 0) scale(0.7) rotate(-5deg);
             opacity: 0;
           }
-          15% {
-            transform: translate3d(8vw, -1.5vh, 0) scale(1.02) rotate(-4deg);
+          14% {
+            transform: translate3d(10vw, -10vh, 0) scale(0.96) rotate(-9deg);
             opacity: 1;
           }
           45% {
-            transform: translate3d(38vw, -4vh, 0) scale(1.05) rotate(-7deg);
+            transform: translate3d(36vw, -36vh, 0) scale(1.05) rotate(-15deg);
             opacity: 1;
           }
           75% {
-            transform: translate3d(75vw, -8vh, 0) scale(1.02) rotate(-9deg);
+            transform: translate3d(70vw, -68vh, 0) scale(1.0) rotate(-21deg);
             opacity: 1;
           }
           100% {
-            transform: translate3d(112vw, -12vh, 0) scale(0.96) rotate(-11deg);
+            transform: translate3d(115vw, -105vh, 0) scale(0.92) rotate(-26deg);
             opacity: 0;
           }
         }
 
         @keyframes origamiGlideMobile {
           0% {
-            transform: translate3d(0vw, 0vh, 0) scale(0.75) rotate(-2deg);
+            transform: translate3d(0, 0, 0) scale(0.65) rotate(-6deg);
             opacity: 0;
           }
-          15% {
-            transform: translate3d(8vw, -2vh, 0) scale(1.02) rotate(-4deg);
+          14% {
+            transform: translate3d(12vw, -12vh, 0) scale(0.92) rotate(-10deg);
             opacity: 1;
           }
           45% {
-            transform: translate3d(40vw, -5vh, 0) scale(1.04) rotate(-7deg);
+            transform: translate3d(40vw, -40vh, 0) scale(1.02) rotate(-16deg);
             opacity: 1;
           }
           75% {
-            transform: translate3d(78vw, -9vh, 0) scale(1.0) rotate(-9deg);
+            transform: translate3d(75vw, -72vh, 0) scale(0.98) rotate(-22deg);
             opacity: 1;
           }
           100% {
-            transform: translate3d(115vw, -13vh, 0) scale(0.94) rotate(-11deg);
+            transform: translate3d(120vw, -112vh, 0) scale(0.88) rotate(-28deg);
             opacity: 0;
           }
         }
 
         .anim-origami-flight {
-          animation: ${variant === "desktop" ? "origamiGlideDesktop" : "origamiGlideMobile"} 4.5s cubic-bezier(0.3, 0.1, 0.25, 1) forwards;
+          animation: ${variant === "desktop" ? "origamiGlideDesktop" : "origamiGlideMobile"} 4.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
           will-change: transform, opacity;
         }
 
@@ -115,7 +115,7 @@ export function DeliveryMascotStage({
         }
       `}</style>
 
-      <div className="relative z-[100] w-[230px] sm:w-[275px] lg:w-[310px] origin-center anim-origami-flight">
+      <div className="relative z-[100] w-[190px] sm:w-[250px] lg:w-[290px] origin-center anim-origami-flight">
         {/* Subtle 3D Launch Aura Glow behind the paper bird */}
         <div
           className="absolute inset-6 -z-10 rounded-full bg-[var(--accent)]/20 blur-2xl"

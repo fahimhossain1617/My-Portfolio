@@ -8,7 +8,6 @@ import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "./BrandIcons";
 import { ContactForm } from "./ContactForm";
 import {
   DeliveryFlightStatus,
-  DeliveryMascotStage,
 } from "./delivery/DeliveryMascotStage";
 import { AgentBuildWrapper } from "./ui/AgentBuildWrapper";
 import { BorderBeam } from "./ui/BorderBeam";
@@ -42,22 +41,6 @@ export function Contact() {
       aria-labelledby="contact-heading"
       className="relative overflow-x-clip py-7 sm:py-9 lg:py-10"
     >
-      {/* 
-        3D Delivery Flight Layer:
-        Elevated at section-level with z-[100] and overflow-visible so it flies completely IN FRONT of
-        the contact cards, contact form, and all other elements without being clipped.
-      */}
-      <div className="pointer-events-none absolute inset-0 z-[100] overflow-visible">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 h-full relative overflow-visible">
-          <div className="absolute top-28 sm:top-32 lg:top-28 left-4 sm:left-6 lg:left-8 overflow-visible">
-            <DeliveryMascotStage
-              flightStatus={flightStatus}
-              variant="desktop"
-            />
-          </div>
-        </div>
-      </div>
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
           {/* Left 5 Columns: Direct Contact Channels (Launch Origin for 3D Origami Glider) */}
